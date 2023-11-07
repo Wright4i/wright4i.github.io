@@ -1,6 +1,6 @@
-# Joseph Wright's Programming Portfolio
+# Welcome!
 
-Welcome to my personal programming portfolio on GitHub Pages. This site showcases a curated collection of my open source projects, insightful code tutorials, and a wealth of resources and experiences as an Independent Consultant Programmer specialized in the IBM i platform.
+This site showcases a curated collection of my open source projects, insightful code tutorials, and a wealth of resources and experiences as an Independent Consultant Programmer specialized in the IBM i platform.
 
 ## About the Portfolio
 
@@ -8,10 +8,10 @@ This portfolio is more than just a compilation of projects; it's a reflection of
 
 ### What You'll Find Here
 
-- **Open Source Projects:** Browse through various projects that I've made open for collaboration, each accompanied by documentation and insights into how they enhance IBM i applications.
-- **Code Tutorials:** Dive into step-by-step tutorials that cover the gamut from the basics of Python to the nuances of integrating modern open-source technologies with IBM i systems.
-- **RPG Corner:** A special section dedicated to RPG programming where you can find best practices, code snippets, and my personal commentary on the evolution of RPG over the years.
-- **Tech Insights:** Articles and blog posts where I share my thoughts and experiences on the latest tech trends, how they impact the world of IBM i, and how to leverage them in your own development journey.
+- **[Open Source Projects](/oss/home):** Browse through various projects that I've made open for collaboration, each accompanied by documentation and insights into how they enhance IBM i applications.
+- **[Code Tutorials](/tut/home):** Dive into step-by-step tutorials that cover the gamut from the basics of Python to the nuances of integrating modern open-source technologies with IBM i systems.
+- **[RPG Corner](/rpg/home):** A special section dedicated to RPG programming where you can find best practices, code snippets, and my personal commentary on the evolution of RPG over the years.
+- **[Tech Insights](/tech/home):** Articles and blog posts where I share my thoughts and experiences on the latest tech trends, how they impact the world of IBM i, and how to leverage them in your own development journey.
 
 ## Purpose
 
@@ -23,4 +23,4 @@ Your feedback and contributions are always welcome! If you'd like to collaborate
 
 Thank you for visiting, and happy coding!
 
-**@Wright4i**
+Joseph Wright
