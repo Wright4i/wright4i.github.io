@@ -67,7 +67,7 @@ cmdLen = %len(%trimr(cmdStr));
 
 // Call the QCMDEXC program to execute the command
 QCMDEXC(cmdStr: cmdLen);
-**END-FREE
+
 ```
 
 
