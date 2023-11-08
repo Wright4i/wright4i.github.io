@@ -1,0 +1,11 @@
+.markdown-section pre[class*="shiki"] {
+  background: transparent;
+  color: inherit;
+  border-radius: 0.5em;
+}
+.markdown-section pre[class*="shiki"] code {
+  padding: 0;
+  border: none;
+  background: transparent;
+  margin: 1em 0em; /* Extra blank line header/footer */
+}

@@ -1,0 +1,65 @@
+name: Deploy with GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout main repository
+      - name: Checkout main repository
+        uses: actions/checkout@v3
+      
+      # Checkout syntaxes from external repository
+      - name: Checkout syntaxes from external repository
+        uses: actions/checkout@v3
+        with:
+          repository: 'barrettotte/vscode-ibmi-languages'
+          path: 'external-syntaxes'
+          ref: 'master'
+      
+      # Copy syntaxes to the appropriate directory
+      - name: Create syntaxes directory and copy syntaxes
+        run: |
+          mkdir -p include/syntaxes
+          cp -r external-syntaxes/syntaxes/* include/syntaxes/
+
+      # Cleanup external repo
+      - name: Remove external repository
+        run: rm -rf external-syntaxes/
+
+      # List contents of syntaxes copy
+      - name: List contents of include/syntaxes
+        run: ls -R include/syntaxes  
+
+      # Temporarily remove syntaxes from .gitignore and commit the changes
+      - name: Temporarily remove syntaxes from .gitignore
+        run: |
+          sed -i '/^syntaxes\//d' .gitignore
+          git config --global user.email "joseph@wright400.com"
+          git config --global user.name "Joseph Wright"
+          git add .gitignore
+          git commit -m "Temporarily remove syntaxes from .gitignore for deployment"
+
+      # Force add syntaxes directory to git
+      - name: Add syntaxes directory to git
+        run: |
+          git add -f include/syntaxes
+          git commit -m "Add syntaxes directory for deployment"
+
+      # Deploy to GitHub Pages using a more flexible action
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: '.' # The folder the action should deploy.
+          clean: true # Automatically remove deleted files from the deployment
+          token: ${{ secrets.PERSONAL_TOKEN }}
