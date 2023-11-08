@@ -32,6 +32,10 @@ jobs:
           mkdir -p include/syntaxes
           cp -r external-syntaxes/syntaxes/* include/syntaxes/
 
+      # Cleanup external repo
+      - name: Remove external repository
+        run: rm -rf external-syntaxes/
+
       # List contents of syntaxes copy
       - name: List contents of include/syntaxes
         run: ls -R include/syntaxes  
