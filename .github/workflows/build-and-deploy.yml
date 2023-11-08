@@ -25,16 +25,20 @@ jobs:
           repository: 'barrettotte/vscode-ibmi-languages'
           path: 'external-syntaxes'
           ref: 'master'
+
+      # Submodule fix
+      - name: Remove any existing .git directory within syntaxes (prevent it from becoming a submodule)
+        run: rm -rf external-syntaxes/.git
       
       # Copy syntaxes to the appropriate directory
       - name: Create syntaxes directory and copy syntaxes
         run: |
-          mkdir -p includes/syntaxes
-          cp -r external-syntaxes/syntaxes/* includes/syntaxes/
+          mkdir -p include/syntaxes
+          cp -r external-syntaxes/* include/syntaxes/
 
       # List contents of syntaxes copy
-      - name: List contents of includes/syntaxes
-        run: ls -R includes/syntaxes  
+      - name: List contents of include/syntaxes
+        run: ls -R include/syntaxes  
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
