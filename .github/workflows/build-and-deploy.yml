@@ -23,14 +23,18 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: 'barrettotte/vscode-ibmi-languages'
-          path: 'syntaxes'
+          path: 'external-syntaxes'
           ref: 'master'
       
       # Copy syntaxes to the appropriate directory
       - name: Create syntaxes directory and copy syntaxes
         run: |
           mkdir -p includes/syntaxes
-          cp -r syntaxes/syntaxes/* includes/syntaxes/
+          cp -r external-syntaxes/syntaxes/* includes/syntaxes/
+
+      # List contents of syntaxes copy
+      - name: List contents of includes/syntaxes
+        run: ls -R includes/syntaxes  
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
