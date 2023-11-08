@@ -10,24 +10,22 @@ jobs:
       - name: Checkout main repository
         uses: actions/checkout@v3
         with:
-          repository: 'wright4i/wright4i.github.io'
           path: 'main-repo'
-          ref: 'main'  # Checkout the main branch
 
-      - name: Sparse checkout syntaxes from another repository
+      - name: Sparse checkout syntaxes from vscode-ibmi-languages
         uses: actions/checkout@v3
         with:
           repository: 'barrettotte/vscode-ibmi-languages'
           path: 'temp-repo'
-          ref: 'main'  # Checkout the main branch
+          ref: 'master'  # Use the correct branch name here
 
-      - name: Initialize sparse-checkout
+      - name: Initialize sparse-checkout for syntaxes directory
         run: |
           cd temp-repo
           git sparse-checkout init --cone
           git sparse-checkout set syntaxes
 
-      - name: Checkout the syntaxes folder
+      - name: Perform the checkout
         run: |
           cd temp-repo
           git checkout
@@ -35,4 +33,4 @@ jobs:
       - name: Move syntaxes to the desired directory
         run: |
           mkdir -p main-repo/includes
-          mv temp-repo/syntaxes main-repo/includes/syntaxes
+          mv temp-repo/syntaxes main-re
