@@ -1,0 +1,38 @@
+name: Checkout syntaxes directory
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v3
+        with:
+          repository: 'wright4i/wright4i.github.io'
+          path: 'main-repo'
+          ref: 'main'  # Checkout the main branch
+
+      - name: Sparse checkout syntaxes from another repository
+        uses: actions/checkout@v3
+        with:
+          repository: 'barrettotte/vscode-ibmi-languages'
+          path: 'temp-repo'
+          ref: 'main'  # Checkout the main branch
+
+      - name: Initialize sparse-checkout
+        run: |
+          cd temp-repo
+          git sparse-checkout init --cone
+          git sparse-checkout set syntaxes
+
+      - name: Checkout the syntaxes folder
+        run: |
+          cd temp-repo
+          git checkout
+
+      - name: Move syntaxes to the desired directory
+        run: |
+          mkdir -p main-repo/includes
+          mv temp-repo/syntaxes main-repo/includes/syntaxes
