@@ -40,6 +40,8 @@ jobs:
       - name: Temporarily remove syntaxes from .gitignore
         run: |
           sed -i '/^syntaxes\//d' .gitignore
+          git config --global user.email "joseph@wright400.com"
+          git config --global user.name "Joseph Wright"
           git add .gitignore
           git commit -m "Temporarily remove syntaxes from .gitignore for deployment"
 
