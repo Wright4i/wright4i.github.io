@@ -1,0 +1,6 @@
+*.json linguist-detectable=true
+*.py linguist-detectable=false
+
+# linguist mismatch
+*.clp linguist-detectable=false
+*.cmd linguist-detectable=false
