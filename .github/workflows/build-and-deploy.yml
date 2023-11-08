@@ -1,42 +1,41 @@
-name: Build and Deploy to GitHub Pages
+name: Deploy with GitHub Pages
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
+      # Checkout main repository
       - name: Checkout main repository
         uses: actions/checkout@v3
-
+      
+      # Checkout syntaxes from external repository
       - name: Checkout syntaxes from external repository
         uses: actions/checkout@v3
         with:
           repository: 'barrettotte/vscode-ibmi-languages'
           path: 'syntaxes'
           ref: 'master'
-
-      - name: Create syntaxes directory
-        run: mkdir -p docs/includes/syntaxes
-
-      - name: Copy syntaxes to docs/includes
-        run: cp -r syntaxes/syntaxes/* docs/includes/syntaxes
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 'latest'
-
-      - name: Install dependencies (if any)
+      
+      # Copy syntaxes to the appropriate directory
+      - name: Create syntaxes directory and copy syntaxes
         run: |
-          if [ -f package.json ]; then npm install; fi
+          mkdir -p includes/syntaxes
+          cp -r syntaxes/syntaxes/* includes/syntaxes/
 
+      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs  # This should point to the docs directory
+          publish_branch: gh-pages  # The branch you want to push to
+          publish_dir: ./  # The directory you want to push to GitHub Pages
