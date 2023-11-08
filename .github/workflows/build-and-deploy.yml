@@ -40,10 +40,11 @@ jobs:
       - name: List contents of include/syntaxes
         run: ls -R include/syntaxes  
 
-      # Deploy to GitHub Pages
+      # Deploy to GitHub Pages using a more flexible action
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          personal_token: ${{ secrets.PERSONAL_TOKEN }}
-          publish_branch: gh-pages 
-          publish_dir: ./ 
+          branch: gh-pages # The branch the action should deploy to.
+          folder: '.' # The folder the action should deploy.
+          clean: true # Automatically remove deleted files from the deployment
+          token: ${{ secrets.PERSONAL_TOKEN }}
