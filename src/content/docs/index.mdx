@@ -1,0 +1,110 @@
+---
+title: Welcome to Wright4i
+description: Wright4i landing page
+template: splash
+hero:
+  tagline: Follow me on my coding journey
+  image:
+    file: /public/logo.png
+---
+
+import { Card, CardGrid, Aside, LinkCard, Icon } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import rpgHero from '../../assets/RPG_hero.webp';
+import pyHero from '../../assets/PY_hero.webp';
+import nodeHero from '../../assets/NODE_hero.webp';
+import webHero from '../../assets/WEB_hero.webp';
+import moreHero from '../../assets/MORE_hero.webp';
+
+<Aside type="note">
+  This site is a compilation of projects from the perspective of an IBM i programmer. Our journey on the platform can be `unique` at the best of times.  
+  
+  I want to give back to the amazing community that has taught me so much. 
+  
+  _**Thank you!!**  ~ Joseph Wright_
+</Aside>
+
+<div class="grid-4">
+  <a class="grid-button" href="/presentations/">
+    <div class="grid-item color-dark-bg color-aquamarine">
+      <Icon name="rocket" class="icon-inline" /> Presentations
+    </div>
+  </a>
+  <a class="grid-button" href="/blog/">
+    <div class="grid-item color-dark-bg color-lapis-lazuli">
+      <Icon name="document" class="icon-inline" /> Blog
+    </div>
+  </a>
+  <a class="grid-button" href="/resources/">
+    <div class="grid-item color-dark-bg color-accent">
+      <Icon name="codePen" class="icon-inline" /> Resources
+    </div>
+  </a>
+  <a class="grid-button" href="/about/">
+    <div class="grid-item color-dark-bg color-turquoise">
+      <Icon name="open-book" class="icon-inline" /> About me
+    </div>
+  </a>
+</div>
+
+## Choose your own adventure:
+<CardGrid stagger>
+  <Card>
+    <Image src={rpgHero} alt="RPG logo"/>
+    <div class="grid-1">
+      <a class="grid-button" href="guides/rpg/">
+        <div class="grid-item color-dark-bg color-ruby">
+           Punch up your RPG <Icon name="right-caret" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+	</Card>
+	<Card>
+    <Image src={pyHero} alt="Python logo"/>
+    <div class="grid-1">
+      <a class="grid-button" href="/guides/py/">
+        <div class="grid-item color-dark-bg color-sapphire">
+          Get off my plane <Icon name="right-caret" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+	</Card>
+  <Card>
+    <Image src={nodeHero} alt="Node logo"/>
+    <div class="grid-1">
+      <a class="grid-button" href="/guides/node/">
+        <div class="grid-item color-dark-bg color-emerald">
+          Don't get LOST in the Javascript <Icon name="right-caret" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+	</Card>
+  <Card>
+    <Image src={webHero} alt="Web logo"/>
+    <div class="grid-1">
+      <a class="grid-button" href="/guides/web/">
+        <div class="grid-item color-dark-bg color-amethyst">
+          Get unstuck <Icon name="right-caret" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+	</Card>
+  <Card>
+    <Image src={moreHero} alt="More logo"/>
+    <div class="grid-1">
+      <a class="grid-button" href="/guides/more/">
+        <div class="grid-item color-dark-bg color-topaz">
+          And so much more... <Icon name="right-caret" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+	</Card>
+</CardGrid>
+
+<Aside type="caution">
+  _```"Rome wasn't built in a day, but they were laying bricks every hour."```_ – John Heywood
+
+  **This is the usual disclaimer I hope to remove one day.** I'm still learning & growing and so is this site.  I'm willing to share what I've learned and I hope you find it helpful.
+
+  _```"From little acorns, mighty oaks do grow."```_ – Old English Proverb
+</Aside>
