@@ -171,6 +171,13 @@ div.grid-4 {
 	grid-template-columns: repeat(4, 1fr);
 }
 
+/* Mobile view: all grids act like a single column grid */
+@media screen and (max-width: 600px) {
+	div.grid-1, div.grid-2, div.grid-3, div.grid-4 {
+		grid-template-columns: repeat(1, 1fr);
+	}
+}
+
 a.grid-button {
 	color: inherit !important;
 	text-decoration: none !important;
