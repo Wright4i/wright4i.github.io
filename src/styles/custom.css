@@ -126,6 +126,11 @@
 	font-size: 1.5rem;
 }
 
+/* Sidebar TOC enforce minimum width */
+.right-sidebar-container {
+	min-width: var(--sl-sidebar-width);
+}
+
 /* Site hero */
 div.hero {
 	padding: 0;
