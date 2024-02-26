@@ -1,3 +1,9 @@
+/* Overrides */
+:root {
+	--sl-content-width: 72rem; /* 45rem by default */
+	--sl-sidebar-width: 17rem; /* 18.75rem by default */
+}
+
 /* Dark mode colors. */
 :root[data-theme='dark']{
 	--sl-color-accent-low: hsl(259, 95%, 14%);
