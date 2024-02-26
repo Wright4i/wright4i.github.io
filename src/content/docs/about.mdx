@@ -1,0 +1,226 @@
+---
+title: 'About Me'
+description: 'About Me landing page'
+template: 'splash'
+hero:
+  image:
+    file: '../../assets/ABOUT_hero.jpg'
+---
+
+import { Aside, CardGrid, Card, Icon } from '@astrojs/starlight/components';
+import IconGraduationCap from '~icons/fa-solid/graduation-cap';
+import IconLeader from '~icons/fluent-mdl2/party-leader';
+import IconUsersThree from '~icons/ph/users-three'; 
+import IconBuilding from '~icons/icon-park-twotone/building-four';
+import IconAirplaneTakeoff from '~icons/ph/airplane-takeoff'; 
+import IconMicrophone from '~icons/fa-solid/microphone';
+import IconGlobeEurope from '~icons/fa-solid/globe-europe';
+import IconOrganization from '~icons/codicon/organization';
+import IconWorkshop from '~icons/grommet-icons/workshop';
+import IconClassroom from '~icons/healthicons/i-training-class';
+import IconCelebrate from '~icons/material-symbols/person-celebrate';
+import IconVSCode from '~icons/devicon-plain/vscode';
+import IconIBM from '~icons/simple-icons/ibm';
+import IconDB2 from '~icons/carbon/ibm-db2-alt';
+import IconPython from '~icons/simple-icons/python';
+import IconNodeJS from '~icons/simple-icons/nodedotjs';
+import IconCode from '~icons/logos/codeigniter-icon';
+import IconRocket from '~icons/noto/rocket';
+import IconCake from '~icons/twemoji/birthday-cake';
+import IconPodcast from '~icons/solar/podcast-bold-duotone';
+import IconBull from '~icons/game-icons/bull';
+import IconGPT from '~icons/arcticons/openai-chatgpt';
+import IconWave from '~icons/game-icons/wave-crest';
+
+## Hi, I'm Joseph Wright! 👋
+
+At the heart of Southern California's vibrant tech scene, I navigate the world of programming with a passion. I'm a {new Date().getFullYear() - 1992}-year-old programmer and entrepreneur, steering Wright 400 Inc, an IBM i software consulting company. 
+
+My toolkit? A robust blend of RPG <IconIBM class="icon-inline" />, SQL <IconDB2 class="icon-inline" />, Node <IconNodeJS class="icon-inline" />, and Python <IconPython class="icon-inline" />.
+
+### Journey Through Code <IconCode class="icon-inline" />
+
+My path is defined by learning, leadership, and a dedication to community:
+
+<CardGrid stagger>
+  <Card title="February 2011">
+    <IconGraduationCap color="darkblue" font-size="3rem" /> 
+    The adventure begins. Fresh out of High School I learned the legendary RPG language kick-starting my career.
+  </Card>
+  <Card title="August 2016">
+    <IconLeader color="green" font-size="3rem" /> 
+    Stepped up as the Application Development Manager, leading a team on Modernization projects that brought new technologies to a well-established logistics company.
+  </Card>
+  <Card title="May 2019">
+    <IconUsersThree color="dodgerblue" font-size="3rem" /> 
+    Attended COMMON for the first time - POWERUp19 in Anaheim, CA connecting with the tech community and meeting Liam Allan.
+  </Card>
+  <Card title="September 2019">
+    <IconBuilding color="red" font-size="3rem" /> 
+    Start of my entrepreneurial journey, founding Wright 400 Inc. a software consulting company specializing in IBM i.
+  </Card>
+  <Card title="October 2022">
+    <IconAirplaneTakeoff color="mediumseagreen" font-size="3rem" /> 
+    Traveled to COMMON in St. Louis, MO for NAViGATE22, this trip inspired me to further my contributions into open source.
+  </Card>
+  <Card title="July 2023">
+    <IconMicrophone color="purple" font-size="3rem" /> 
+    Debuted at OCEAN's TechCon23 speaking on Python and RPG. Afterwards, I was featured on TechChannel's Podcast being interviewed on my first-time speaking experience by Charlie Guarino.
+    <div class="grid-1">
+      <a class="grid-button" href="https://techchannel.com/SMB/10/2023/advice-ibm-i-developer">
+        <div class="grid-item color-dark-bg color-amethyst"> 
+          Listen to TechChannel's Podcast <IconPodcast class="icon-inline" />
+        </div>
+      </a>
+      <a class="grid-button" href="https://www.linkedin.com/in/guarinocharles/">
+        <div class="grid-item color-dark-bg color-opal"> 
+          Charlie Guarino on Linkedin <Icon name="linkedin" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+  </Card>
+  <Card title="November 2023">
+    <IconGlobeEurope color="blue" font-size="3rem" /> 
+    Featured on Charlie's amazing webshow - iChime for the month of November. 
+    
+    Shortly after, I attended COMMON in Sweden & Denmark, broadening global connections while meeting teammate Christian Jorgensen in Copenhagen and being afforded the opportunity to help Liam on his workshop in Stockholm.
+    <div class="grid-1">
+      <a class="grid-button" href="https://www.buzzsprout.com/2163228/13950077">
+        <div class="grid-item color-dark-bg color-amethyst"> 
+          Tune into my iChime episode <IconPodcast class="icon-inline" />
+        </div>
+      </a>
+    </div>
+  </Card>
+  <Card title="January 2024">
+    <IconOrganization color="skyblue" font-size="3rem" /> 
+    Became Vice President of Membership at OCEAN User Group.
+    <div class="grid-1">
+      <a class="grid-button" href="https://www.oceanusergroup.org/">
+        <div class="grid-item color-dark-bg color-lapis-lazuli"> 
+          Learn more about OCEAN <IconWave class="icon-inline" /> 
+        </div>
+      </a>
+    </div>
+  </Card>
+  <Card title="March 2024">
+    <IconWorkshop color="orange" font-size="3rem" />
+    Co-hosting a workshop on APIs, Web Services, and Python with Patrick Behr for OCEAN Members.
+    <div class="grid-1">
+      <a class="grid-button" href="https://www.linkedin.com/in/patrick-behr/">
+        <div class="grid-item color-dark-bg color-opal"> 
+          Patrick Behr on Linkedin <Icon name="linkedin" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+  </Card>
+  <Card title="May 2024"> 
+    <IconClassroom color="teal" font-size="3rem" />
+    Continuing our workshop series with Part 2, Patrick and I talk about SQL, Javascript, and coding with Visual Studio Code.
+
+    Later in the month I will be presenting 4 new sessions at COMMON POWERUp24 in Ft. Worth, TX: 
+    * Python for Beginners
+    * Intermediate Python
+    * Use AI Intelligently: ChatGPT, CustomGPTs, and Prompt Engineering
+    * VS Code for Power Users
+    <div class="grid-1">
+      <a class="grid-button" href="https://powerup2024.sched.com/speaker/wright4i">
+        <div class="grid-item color-dark-bg color-topaz"> 
+          COMMON POWERUp Schedule <IconBull class="icon-inline" /> 
+        </div>
+      </a>
+      <a class="grid-button" href="https://chat.openai.com/g/g-JeyXhuLee-codi">
+        <div class="grid-item color-dark-bg color-aquamarine"> 
+          Preview Codi on OpenAI <IconGPT class="icon-inline" />
+        </div>
+      </a>
+    </div>
+  </Card>
+  <Card title="July 2024">
+    <IconCelebrate color="fuchsia" font-size="3rem" />
+    OCEAN's annual tech conference, TechCon24. 
+    
+    Stay tuned, I might be one of the speakers! 🤔
+  </Card>
+</CardGrid>
+
+### Let's Connect 🤝
+
+Find me across the web:
+
+<div class="grid-4"> 
+    <a class="grid-button" href="https://github.com/Wright4i">
+      <div class="grid-item color-moonstone">
+        <Icon name="github" size="4rem"/> 
+      </div>
+    </a>
+    <a class="grid-button" href="https://linkedin.com/in/Wright4i">
+      <div class="grid-item color-opal">
+        <Icon name="linkedin" size="4rem" />
+      </div>
+    </a>
+    <a class="grid-button" href="https://youtube.com/@Wright4i">
+      <div class="grid-item color-garnet">
+        <Icon name="youtube" size="4rem" />
+      </div>
+    </a>
+    <a class="grid-button" href="https://x.com/Wright4i">
+      <div class="grid-item color-onyx">
+        <Icon name="x.com" size="4rem" />
+      </div>
+    </a>
+</div>
+
+<Aside type="tip">
+  Got a question or an idea for the site? [I'd love to hear them!](https://github.com/Wright4i/wright4i.github.io/issues/new)
+</Aside>
+
+### Vice Presidency at OCEAN 🌊
+
+I am proud to be a part of the OCEAN User Group, a community of IBM i professionals in Southern California. I am currently serving as the Vice President of Membership, a role that allows me to contribute to the community in a new way. I am excited to be a part of the Board of Directors and look forward to making a positive impact on the community this year and beyond. I hope to be able to grow our membership and bring new and exciting ideas to the table.
+
+### Core Team Member at Code4i  <IconCake class="icon-inline" />️
+
+<div class="grid-2">
+  <div class="grid item">
+    Code4i is a community-driven initiative that aims to bring modern development tools and practices to the IBM i platform. I am proud to be a part of the core team, working alongside talented individuals Liam, Christian, and Sébastien; **true IBM Champions**.
+
+    The flagship extension, Code for IBM i, turned 3 years old in 2024! I am beyond impresseed with how far we've come. Featured both in the IBM i community and officially recognized by IBM with their full support. We are committed to making the IBM i platform more accessible to developers and are always looking for new contributors to join our project.
+
+    Visual Studio Code is an IDE that's popular with developers across the globe. Adding support for the IBM i through these extensions is a game-changer for how we dvelopment on the platform. This bridges the divide between new developers and the IBM i, making it easier for them to get started and be productive. It also provides a modern development experience to seasoned IBM i developers at no cost.
+  </div>
+  <div class="grid-1">
+    <a class="grid-button" href="https://marketplace.visualstudio.com/items?itemName=HalcyonTechLtd.code-for-ibmi">
+      <div class="grid-item color-dark-bg color-lapis-lazuli">
+        Code for IBM i on the Visual Studio Marketplace <IconVSCode font-size="1.5rem" class="icon-inline" /> 
+      </div>
+    </a>
+    <a class="grid-button" href="https://github.com/codefori">
+      <div class="grid-item color-dark-bg color-pearl">
+       Code4i on Github <Icon name="github" size="1.5rem" class="icon-inline" />
+      </div>
+    </a>
+    <a class="grid-button" href="https://www.linkedin.com/in/worksofbarry">
+      <div class="grid-item color-dark-bg color-opal">
+       Liam Barry Allan on Linkedin <Icon name="linkedin" size="1.5rem" class="icon-inline" />
+      </div>
+    </a>
+    <a class="grid-button" href="https://www.linkedin.com/in/chrjorgensen">
+      <div class="grid-item color-dark-bg color-opal">
+       Christian Jorgensen on Linkedin <Icon name="linkedin" size="1.5rem" class="icon-inline" />
+      </div>
+    </a>
+    <a class="grid-button" href="https://www.linkedin.com/in/sebjulliand">
+      <div class="grid-item color-dark-bg color-opal">
+       Sébastien Julliand on Linkedin <Icon name="linkedin" size="1.5rem" class="icon-inline" />
+      </div>
+    </a>
+  </div>
+</div>
+
+### Future Endeavors <IconRocket class="icon-inline" />
+
+The future is bright and full of ambitious goals. I will continue to write about my experiences and share my knowledge with the community. 
+Speaking at and organizing Conferences will be an integral part of my mission as well an continuing to contribute to open-source projects. 
+
+I am always open to new opportunities and ideas. We can achieve great things together and shape the future of the IBM i by advocating for this great platform. The IBM i runs the world and it's time to show what it can do.
