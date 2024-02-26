@@ -1,0 +1,6 @@
+---
+import GuidesList from '../components/GuidesList.astro';
+const Guides = import.meta.glob('/src/content/docs/guides/web/*.{md,mdx}');
+---
+
+<GuidesList guidesGlob={Guides} title="Web Frontend" directory="web" />

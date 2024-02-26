@@ -1,0 +1,45 @@
+---
+interface Guide {
+    title: string;
+    url: string;
+    depth: number;
+    [key: string]: any; // for any other properties
+}
+
+const { guidesGlob, title, directory } = Astro.props;
+
+async function loadGuides() {
+    const allGuides: Guide[] = [];
+    for (const path in guidesGlob) {
+        // Skip the index page
+        if (path.includes('index')) {
+            continue;
+        }
+
+        const { frontmatter } = await (guidesGlob[path] as () => Promise<{ frontmatter: any }>)();
+        const url = path
+            .replace(`/src/content/docs/guides/${directory}/`, `/guides/${directory}/`)
+            .replace(/\.(mdx|md)$/, '')
+            + '/';
+        const depth = (url.match(/\//g) || []).length - 2; // Subtract 2 for the leading and trailing slashes
+        allGuides.push({ ...frontmatter, url, depth });
+    }
+    return allGuides.sort((a, b) => a.url.localeCompare(b.url));
+}
+
+const guides = await loadGuides();
+---
+
+<div>
+    <h2>{title} Guides</h2>
+    <ul>
+        {guides.map((guide: Guide) => {
+            const Header = `h${Math.min(guide.depth + 2, 5)}`; // Start at h2 and don't go beyond h5
+            return (
+                <li>
+                    <a href={guide.url}><h6>{guide.title}</h6></a>
+                </li>
+            );
+        })}
+    </ul>
+</div>

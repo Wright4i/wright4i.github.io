@@ -1,26 +1,56 @@
+
 # Welcome!
 
-This site showcases a curated collection of my open source projects, insightful code tutorials, and a wealth of resources and experiences as an Independent Consultant Programmer specialized in the IBM i platform.
+This is my personal site where I will showcase my open source projects, code tutorials, resources and cool stuff I've found over the years, and much more!
 
-## About the Portfolio
+I run Wright 400 Inc (@Wright4i) specializing in IBM i consulting.
 
-This portfolio is more than just a compilation of projects; it's a reflection of my journey as a programmer with a particular focus on the robust IBM i and its integral language, RPG. While RPG remains at the heart of my expertise, this portfolio will guide you through my explorations and mastery of other technologies — Node.js, Python, and more! — as I integrate them with the traditional power of IBM i.
+Check out the live build:
+# 🔥 [wright4i.github.io](https://wright4i.github.io) 🔥
 
-### What You'll Find Here
+---
 
-- **[Open Source Projects](/oss/home):** Browse through various projects that I've made open for collaboration, each accompanied by documentation and insights into how they enhance IBM i applications.
-- **[Code Tutorials](/tut/home):** Dive into step-by-step tutorials that cover the gamut from the basics of Python to the nuances of integrating modern open-source technologies with IBM i systems.
-- **[RPG Corner](/rpg/home):** A special section dedicated to RPG programming where you can find best practices, code snippets, and my personal commentary on the evolution of RPG over the years.
-- **[Tech Insights](/tech/home):** Articles and blog posts where I share my thoughts and experiences on the latest tech trends, how they impact the world of IBM i, and how to leverage them in your own development journey.
+# Building on Starlight (powered by Astro)
 
-## Purpose
+Like what you see and want to create your own? You can! Starlight is an easy to use document site focused on server side rendering, no JS by default, efficient websites. It's powered by Astro which is a powerful (opt-in) framework agnostic package giving you unlimited potential without the bloat.
 
-The aim of this GitHub Page is not only to display my work but also to contribute to the community of IBM i developers who are looking to expand their skillset with modern programming languages and tools. Whether you're an RPG veteran or a newcomer to the platform, my hope is that you'll find this resource both educational and inspiring.
+## 🚀 Project Structure
 
-## Contributions
+Inside of your Astro + Starlight project, you'll see the following folders and files:
 
-Your feedback and contributions are always welcome! If you'd like to collaborate on any project or have suggestions on how to improve this portfolio, please feel free to [open an issue](https://github.com/Wright4i/wright4i.github.io/issues) or submit a pull request.
+```
+.
+├── public/
+├── src/
+│   ├── assets/
+│   ├── content/
+│   │   ├── docs/
+│   │   └── config.ts
+│   └── env.d.ts
+├── astro.config.mjs
+├── package.json
+└── tsconfig.json
+```
 
-Thank you for visiting, and happy coding!
+Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
 
-Joseph Wright
+Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+
+Static assets, like favicons, can be placed in the `public/` directory.
+
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
