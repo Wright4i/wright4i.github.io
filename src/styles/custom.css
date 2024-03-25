@@ -9,13 +9,13 @@
 	--sl-color-accent-low: hsl(259, 95%, 14%);
 	--sl-color-accent: hsl(259, 95%, 50%);
 	--sl-color-accent-high: hsl(192, 95%, 70%);
-	--sl-color-white: hsl(259, 5%, 90%);
-	--sl-color-gray-1: hsl(259, 5%, 60%);
-	--sl-color-gray-2: hsl(259, 5%, 50%);
-	--sl-color-gray-3: hsl(259, 5%, 35%);
-	--sl-color-gray-4: hsl(259, 5%, 25);
-	--sl-color-gray-5: hsl(259, 5%, 15%);
-	--sl-color-gray-6: hsl(259, 5%, 13%);
+	--sl-color-white: hsl(259, 5%, 100%);
+	--sl-color-gray-1: hsl(259, 5%, 90%);
+	--sl-color-gray-2: hsl(259, 5%, 80%);
+	--sl-color-gray-3: hsl(259, 5%, 70%);
+	--sl-color-gray-4: hsl(259, 5%, 60%);
+	--sl-color-gray-5: hsl(259, 5%, 30%);
+	--sl-color-gray-6: hsl(259, 5%, 15%);
 	--sl-color-black: hsl(259, 5%, 10%);
 }
 
@@ -25,14 +25,14 @@
 	--sl-color-accent: hsl(259, 95%, 50%);
 	--sl-color-accent-high: hsl(192, 95%, 70%);
 	--sl-color-white: hsl(259, 5%, 10%);
-	--sl-color-gray-1: hsl(259, 5%, 13%);
-	--sl-color-gray-2: hsl(259, 5%, 15%);
-	--sl-color-gray-3: hsl(259, 5%, 25%);
-	--sl-color-gray-4: hsl(259, 5%, 35%);
-	--sl-color-gray-5: hsl(259, 5%, 50%);
-	--sl-color-gray-6: hsl(259, 5%, 60%);
-	--sl-color-gray-7: hsl(259, 5%, 80%);
-	--sl-color-black: hsl(259, 5%, 90%);
+	--sl-color-gray-1: hsl(259, 5%, 25%);
+	--sl-color-gray-2: hsl(259, 5%, 40%);
+	--sl-color-gray-3: hsl(259, 5%, 55%);
+	--sl-color-gray-4: hsl(259, 5%, 65%);
+	--sl-color-gray-5: hsl(259, 5%, 75%);
+	--sl-color-gray-6: hsl(259, 5%, 85%);
+	--sl-color-gray-7: hsl(259, 5%, 95%);
+	--sl-color-black: hsl(259, 5%, 100%);
 }
 
 /* Wright4i's Family of Jewels */
