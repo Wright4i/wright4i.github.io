@@ -74,10 +74,6 @@ Here's how you can enhance the RPGLE code to include parameter passing to the Py
 **free
 ctl-opt dftactgrp(*no);
 
-dcl-pr system extproc('system');
-  *n pointer value options(*string);
-end-pr;
-
 // Example call to the procedure
 CallPython('/path/to/hello.py', 'arg1 arg2 arg3');
 
@@ -89,6 +85,10 @@ dcl-proc CallPython;
     script varchar(256) const;
     parms varchar(256) const;
   end-pi;
+
+  dcl-pr system extproc('system');
+    *n pointer value options(*string);
+  end-pr;
 
   dcl-s command varchar(512);
   dcl-s logId int(10);
