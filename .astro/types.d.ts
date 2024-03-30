@@ -164,16 +164,37 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".mdx"] };
-"guides/py/getting_started.md": {
-	id: "guides/py/getting_started.md";
+"guides/py/flask.mdx": {
+	id: "guides/py/flask.mdx";
+  slug: "guides/py/flask";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".mdx"] };
+"guides/py/getting_started.mdx": {
+	id: "guides/py/getting_started.mdx";
   slug: "guides/py/getting_started";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
-} & { render(): Render[".md"] };
+} & { render(): Render[".mdx"] };
 "guides/py/index.mdx": {
 	id: "guides/py/index.mdx";
   slug: "guides/py";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".mdx"] };
+"guides/py/openpyxl.mdx": {
+	id: "guides/py/openpyxl.mdx";
+  slug: "guides/py/openpyxl";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".mdx"] };
+"guides/py/requests.mdx": {
+	id: "guides/py/requests.mdx";
+  slug: "guides/py/requests";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
@@ -230,5 +251,5 @@ declare module 'astro:content' {
 
 	type AnyEntryMap = ContentEntryMap & DataEntryMap;
 
-	export type ContentConfig = typeof import("../src/content/config.js");
+	export type ContentConfig = typeof import("./../src/content/config.js");
 }

@@ -1,0 +1,146 @@
+---
+title: Getting Started with Python on IBM i
+description: Getting Started with Python on IBM i
+sidebar:
+  order: 1
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+Python has become an indispensable tool for modernizing applications on IBM i, thanks to its versatility, ease of learning, and extensive library support. IBM has recognized this and provides official support for Python through the Open Source Package Manager available in Access Client Solutions (ACS). This post will guide you through installing Python on your IBM i system, and demonstrate how to integrate Python scripts into your existing RPG and CLLE applications.
+
+## Installing Python via ACS's Open Source Package Manager
+
+IBM i's Access Client Solutions (ACS) offers an Open Source Package Manager that simplifies the installation of Python and other open-source software directly on your IBM i system. Here’s how to get started:
+
+1. **Open ACS** and navigate to the **Open Source Package Management** tool.
+2. **Select your system** and connect to it.
+3. Look for the **python39** package in the available package list. This package includes Python 3.9, which is the version recommended by IBM and comes with pip, Python’s package manager, making it easy to install additional Python libraries.
+4. **Install the python39 package** by selecting it and following the on-screen instructions to complete the installation process.
+
+Once installed, you can access Python 3.9 from a PASE shell by typing `python3` or `python3.9`.
+
+## Integrating Python with Your IBM i Applications
+
+Python can enhance your RPG and CLLE applications by adding new functionalities that are easier to implement in Python or by leveraging Python's vast ecosystem of libraries.
+
+<Tabs>
+  <TabItem label="RPG Basic">
+
+Here's a basic example of RPG code calling a Python script. This example assumes you have a Python script named `hello.py` in the IFS.
+
+```RPGLE
+**free
+  ctl-opt dftactgrp(*no);
+
+  dcl-pr system extproc('system');
+    *n pointer value options(*string);
+  end-pr;
+
+  dcl-s command varchar(256);
+
+  command = 'QSH CMD(''python3 /path/to/hello.py'')';
+  system(command);
+
+  *inlr = *on;
+```
+
+This RPG snippet constructs a command string to call `hello.py` using the `system()` procedure, which executes the command in a PASE environment.
+
+  </TabItem>
+  <TabItem label="RPG Advanced">
+
+For more robust integration, including error handling and logging, consider encapsulating the call in a procedure like `CallPython` and add it to a `SRVPGM`. This example also includes writing the call details to a DB2 table named `PYTHON_LOGS`.
+
+#### PYTHON_LOGS Table Definition
+
+First, create the PYTHON_LOGS table in your DB2 database to log details about Python script executions. This table will record the script path, parameters passed to the script, the result code of the execution, and a timestamp.
+
+```sql
+CREATE TABLE PYTHON_LOGS (
+    ID INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    SCRIPT_PATH VARCHAR(256),
+    PARAMETERS VARCHAR(256),
+    RESULT_CODE INT,
+    EXECUTION_TIMESTAMP TIMESTAMP DEFAULT CURRENT TIMESTAMP,
+    COMPLETION_TIMESTAMP TIMESTAMP,
+    PRIMARY KEY (ID)
+);
+```
+
+Here's how you can enhance the RPGLE code to include parameter passing to the Python script and logging execution details to the PYTHON_LOGS table:
+
+```RPGLE
+**free
+ctl-opt dftactgrp(*no);
+
+dcl-pr system extproc('system');
+  *n pointer value options(*string);
+end-pr;
+
+// Example call to the procedure
+CallPython('/path/to/hello.py', 'arg1 arg2 arg3');
+
+*inlr = *on;
+
+// Procedure to call Python and log the call
+dcl-proc CallPython;
+  dcl-pi ind;
+    script varchar(256) const;
+    parms varchar(256) const;
+  end-pi;
+
+  dcl-s command varchar(512);
+  dcl-s logId int(10);
+  dcl-s resultCode int(10);
+
+  // Log the intent to call a script and capture the log ID
+  exec sql
+    SELECT ID 
+    INTO :logId 
+    FROM FINAL TABLE (
+      INSERT INTO PYTHON_LOGS (SCRIPT_PATH, PARAMETERS)
+      VALUES (:script, :parms)
+    );
+
+  // Prepare the command with parameters
+  command = 'QSH CMD(''python3 ' + script + ' ' + parms + ''')';
+
+  // Execute the command
+  resultCode = system(command);
+
+  // Update the log with the result
+  exec sql
+    UPDATE PYTHON_LOGS
+    SET RESULT_CODE = :resultCode,
+        COMPLETION_TIMESTAMP = CURRENT_TIMESTAMP
+    WHERE ID = :logId;
+
+  // Return success if resultCode is 0
+  return (resultCode = 0);
+
+end-proc;
+```
+
+This approach not only executes the Python script but also allows for logging and error handling based on the result of the `system()` call.
+
+  </TabItem>
+  <TabItem label="CLLE">
+
+Calling Python from a CL program involves using the `QSH` command to execute the script in the PASE environment. Here's a CLLE example:
+
+```CL
+PGM
+  /* Call Python Script */
+  QSH CMD('python3 /path/to/hello.py')
+ENDPGM
+```
+
+This CLLE program executes a Python script located at `/path/to/hello.py` using the Qshell (`QSH`) command.
+
+  </TabItem>
+</Tabs>
+
+## Conclusion
+
+Integrating Python into your IBM i environment opens up a world of possibilities for modernizing your applications and leveraging the extensive ecosystem of Python libraries. Whether you're extending RPG applications or automating tasks with CLLE, Python can provide powerful functionalities to your IBM i system.

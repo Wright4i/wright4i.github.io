@@ -1,0 +1,252 @@
+---
+title: "Consuming APIs with Python: requests"
+description: "Consuming APIs with Python: requests"
+sidebar:
+    order: 2  
+---
+
+import { Aside, Tabs, TabItem } from "@astrojs/starlight/components";
+
+In today's interconnected world, APIs (Application Programming Interfaces) serve as the backbone for much of the software we use. For IBM i users, leveraging APIs can unlock a wealth of data and functionality, bridging the gap between traditional applications and modern services. This post will introduce you to the basics of consuming APIs using Python on the IBM i platform, complete with a real example that you can try out today.
+
+## Why Python for API Consumption?
+
+Python stands out for its simplicity and readability, making it an ideal choice for interacting with web APIs. With its vast standard library and third-party modules, Python simplifies the process of sending requests to a web server and handling the responses. Furthermore, Python's popularity in the development community means you're likely to encounter Python example code in API documentation, making it easier to understand and implement API integrations.
+
+One such third-party module is `requests`, which we will use in this tutorial. This accessibility and the wealth of resources available can significantly streamline the learning curve when working with new APIs.
+
+## Setting Up Your Environment
+
+Once Python is set up, you'll need to install the `requests` library. You can do this by running the following command:
+
+```bash
+pip3 install requests
+```
+
+## API Examples
+
+<Tabs>
+  <TabItem label="Simple">
+        
+        For this example, we'll use the is.gd service to shorten a URL. This demonstrates not only how to consume APIs using Python but also gives us a practical utility that can be used in a variety of applications.
+
+        Here's a Python script that takes a URL as input and uses the is.gd service to generate a shortened version of that URL:
+
+        ```python title="shorten_url.py"
+        import requests
+
+        def shorten_url(original_url):
+            api_url = 'https://is.gd/create.php'
+            params = {
+                'format': 'json',
+                'url': original_url
+            }
+
+            response = requests.get(api_url, params=params)
+            if response.status_code == 200:
+                short_url = response.json().get('shorturl')
+                print(f"Original URL: {original_url}")
+                print(f"Shortened URL: {short_url}")
+            else:
+                print('Failed to shorten URL', response.status_code)
+
+        if __name__ == "__main__":
+            # Example URL to shorten
+            original_url = 'https://example.com'
+            shorten_url(original_url)
+        ```
+
+        In this script, we construct a GET request to the is.gd API with the original URL passed as a parameter. We specify the format as JSON so that the response is easy to parse. Upon a successful request, the API returns a JSON object from which we extract the shortened URL.
+
+        #### Running the Script on IBM i
+
+        Save as `shorten_url.py` on the IFS then in a terminal or QSH:
+
+        ```bash
+        python3 shorten_url.py
+        ```
+
+        You should see the original URL and its shortened version printed out to your console.
+
+        #### Why This Matters
+
+        URL shortening is a common task in modern web development, useful for making links more manageable, tracking click rates, or simply saving space in documents and messages. Demonstrating API consumption with Python through a practical example like URL shortening showcases the immediate utility and flexibility of Python scripting on IBM i systems.
+
+    </TabItem>
+    <TabItem label="Enhanced">
+
+        To make our URL shortening script more powerful, we'll now add the ability for users to specify a custom alias for the shortened URL. Additionally, we'll implement error handling to address specific API errors, such as when an alias is already in use.
+
+        #### Modifying the Script to Accept Custom Aliases
+
+        We'll use the `argparse` module to add an optional argument for the custom alias. The script will also ensure that the alias meets the specified length criteria and will append a random three-digit number if the initial alias request fails due to duplication.
+
+        Here's the updated script:
+
+        ```python title="shorten_url.py" mark={2-3,5,7-8,11-12,17-31,36-44}
+        import requests
+        import argparse
+        import random
+
+        def shorten_url(original_url, custom_alias=None):
+            api_url = 'https://is.gd/create.php'
+            if custom_alias:
+                custom_alias = custom_alias.strip()
+            params = {
+                'format': 'json',
+                'url': original_url,
+                'shorturl': custom_alias if custom_alias else None
+            }
+
+            response = requests.get(api_url, params=params)
+            if response.status_code == 200:
+                json_response = response.json()
+                if 'errorcode' in json_response:
+                    error_code = json_response['errorcode']
+                    if error_code == 2 and custom_alias:
+                        # Alias is already in use, try appending a random 3-digit number
+                        new_alias = custom_alias + str(random.randint(100, 999))
+                        return shorten_url(original_url, new_alias)
+                    else:
+                        error_msg = f"Error: {json_response.get('errormessage', 'Unknown error')}"
+                        print(error_msg)
+                elif 'shorturl' in json_response:
+                    print(f"Original URL: {original_url}")
+                    print(f"Shortened URL: {json_response['shorturl']}")
+                else:
+                    print("Error: Failed to shorten URL due to an unexpected issue.")
+            else:
+                print('Failed to shorten URL', response.status_code)
+
+        if __name__ == "__main__":
+            parser = argparse.ArgumentParser(description='Shorten a URL using the is.gd service.')
+            parser.add_argument('url', help='The URL to shorten')
+            parser.add_argument('--alias', help='Custom alias for the shortened URL (between 5 and 30 characters)', type=str)
+            args = parser.parse_args()
+
+            if args.alias and not 5 <= len(args.alias) <= 30:
+                print("Error: Alias must be between 5 and 30 characters.")
+            else:
+                shorten_url(args.url, args.alias)
+        ```
+
+        #### Running the Enhanced Script
+
+        With the new functionality, you can now specify an optional alias when shortening a URL:
+
+        ```bash
+        python3 shorten_url.py https://example.com --alias customLink
+        ```
+
+        If the alias is already taken, the script automatically tries a new alias by appending a random three-digit number to your original alias, ensuring uniqueness.
+
+        #### Why This Matters
+
+        Adding the ability to specify custom aliases for shortened URLs offers more personalized and memorable links, useful for branding and marketing efforts. The automatic handling of alias duplication errors by appending a random number ensures the process is smooth and user-friendly, demonstrating the script's robustness.
+
+        This enhancement showcases the practical application of error handling and conditional logic in Python scripts, making them more adaptive and reliable for real-world use.
+
+    </TabItem>
+    <TabItem label="Enhanced with DB2">
+
+        Enhancing the URL shortening script to write results to a DB2 table adds another layer of utility, allowing for persistent storage and analysis of the shortened URLs and any encountered errors.
+
+        #### Updating the Script for DB2 Integration
+
+        To integrate database logging, we'll need to use the `ibm_db` module for DB2 connectivity. Ensure you have `ibm_db` installed in your Python environment:
+        <Aside type="note">
+            `pyodbc` is also a popular choice for connecting to DB2 databases and can be installed using `pip3 install pyodbc`.
+        </Aside>
+
+        ```bash
+        pip3 install ibm_db
+        ```
+
+
+        #### SQL for Creating the DB2 Table
+
+        ```sql
+        CREATE TABLE SHORTURLS (
+            LOG_ID INT GENERATED ALWAYS AS IDENTITY,
+            ORIGINAL_URL VARCHAR(1024),
+            SHORTENED_URL VARCHAR(24),
+            API_ERROR VARCHAR(255),
+            REQUESTED TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (LOG_ID)
+        );
+        ```
+
+        This table structure includes a primary key `LOG_ID`, the `ORIGINAL_URL`, the `SHORTENED_URL` obtained from the API, and an `API_ERROR` field to record any errors returned by the API. The `REQUESTED` column will automatically record when each log entry is created.
+
+        Here's how you can modify the script to include database logging:
+
+        ```python title="shorten_url_db2.py" mark={4,6-14,34,37,39,41}
+        import requests
+        import argparse
+        import random
+        import ibm_db
+
+        def log_to_db(original_url, shortened_url=None, api_error=None):
+            conn = ibm_db.connect()
+            insert_sql = "INSERT INTO SHORTURLS (ORIGINAL_URL, SHORTENED_URL, API_ERROR) VALUES (?, ?, ?)"
+            stmt = ibm_db.prepare(conn, insert_sql)
+            ibm_db.bind_param(stmt, 1, original_url)
+            ibm_db.bind_param(stmt, 2, shortened_url)
+            ibm_db.bind_param(stmt, 3, api_error)
+            ibm_db.execute(stmt)
+            ibm_db.close(conn)
+
+        def shorten_url(original_url, custom_alias=None):
+            api_url = 'https://is.gd/create.php'
+            if custom_alias:
+                custom_alias = custom_alias.strip()
+            params = {
+                'format': 'json',
+                'url': original_url,
+                'shorturl': custom_alias if custom_alias else None
+            }
+
+            response = requests.get(api_url, params=params)
+            if response.status_code == 200:
+                json_response = response.json()
+                if 'errorcode' in json_response:
+                    error_code = json_response['errorcode']
+                    if error_code == 2 and custom_alias:
+                        # Alias is already in use, try appending a random 3-digit number
+                        new_alias = custom_alias + str(random.randint(100, 999))
+                        log_to_db(original_url, json_response['shorturl'])
+                    else:
+                        error_msg = f"Error: {json_response.get('errormessage', 'Unknown error')}"
+                        log_to_db(original_url, api_error=error_msg)
+                elif 'shorturl' in json_response:
+                    log_to_db(original_url, json_response['shorturl'])
+                else:
+                    log_to_db(original_url, api_error='Failed to shorten URL')
+            else:
+                print('Failed to shorten URL', response.status_code)
+
+        if __name__ == "__main__":
+            parser = argparse.ArgumentParser(description='Shorten a URL using the is.gd service and log to DB2.')
+            parser.add_argument('url', help='The URL to shorten')
+            parser.add_argument('--alias', help='Custom alias for the shortened URL (between 5 and 30 characters)', type=str)
+            args = parser.parse_args()
+
+            if args.alias and not 5 <= len(args.alias) <= 30:
+                print("Error: Alias must be between 5 and 30 characters.")
+            else:
+                shorten_url(args.url, args.alias)
+        ```
+
+        #### Running the Enhanced Script
+
+        With DB2 integration, every execution of the script now logs the request and response details to your DB2 table:
+
+        ```bash
+        python3 shorten_url.py https://example.com --alias customLink
+        ```
+
+        This setup not only facilitates tracking and analyzing the usage of your URL shortening script but also illustrates a practical example of integrating Python scripts with IBM i's DB2 database for logging and data persistence.
+
+    </TabItem>
+
+</Tabs>

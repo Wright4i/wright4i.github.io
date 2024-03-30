@@ -1,0 +1,144 @@
+---
+title: "Hosting APIs with Python: flask"
+description: "Hosting APIs with Python: flask"
+sidebar:
+    order: 3
+---
+
+In the previous post, we delved into consuming APIs with Python on IBM i, highlighting the simplicity and effectiveness of Python for such tasks. Moving forward, let's switch roles from consumers to producers of APIs. Hosting your own API on IBM i using Python and Flask can serve numerous purposes: from making IBM i data accessible to web and mobile applications, to integrating with external systems.
+
+## Introduction to Flask
+
+Flask is a lightweight web application framework. It's designed to make getting started quick and easy, with the ability to scale up to complex applications. For IBM i users, Flask offers a straightforward path to creating web services that can interact with DB2 databases or any other resources available to the IBM i system.
+
+## Setting Up Your Environment
+
+Before creating your API, ensure you have Flask installed in your Python environment:
+
+```bash
+pip3 install Flask
+```
+
+## API Examples
+
+import { Tabs, TabItem, Aside } from "@astrojs/starlight/components";
+
+<Tabs>
+  <TabItem label="Employee Detail API">
+
+  A Flask application that serves data for a specific employee from the `SAMPLE.EMPLOYEE` table in a DB2 database, based on the employee number (`EMPNO`) provided.
+
+  ```python title="app.py"
+  from flask import Flask, jsonify, request
+  import ibm_db_dbi
+
+  app = Flask(__name__)
+
+  @app.route('/employee/<empno>', methods=['GET'])
+  def get_employee(empno):
+      try:
+          conn = ibm_db_dbi.connect() # Include Connection details here if not *LOCAL
+          cursor = conn.cursor()
+          sql = """
+          SELECT EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, PHONENO, 
+                HIREDATE, JOB, EDLEVEL, SEX, BIRTHDATE, SALARY, BONUS, COMM 
+          FROM SAMPLE.EMPLOYEE
+          WHERE EMPNO = ?
+          """
+          cursor.execute(sql, (empno,))
+          employee = cursor.fetchone()
+          cursor.close()
+          conn.close()
+
+          if employee:
+              employee_data = {
+                  'empno': employee[0].strip(),
+                  'firstname': employee[1].strip(),
+                  'middle_initial': employee[2].strip(),
+                  'lastname': employee[3].strip(),
+                  'workdept': employee[4].strip() if employee[4] else '',
+                  'phoneno': employee[5].strip(),
+                  'hiredate': employee[6].isoformat() if employee[6] else '',
+                  'job': employee[7].strip(),
+                  'edlevel': employee[8],
+                  'sex': employee[9].strip(),
+                  'birthdate': employee[10].isoformat() if employee[10] else '',
+                  'salary': float(employee[11]),
+                  'bonus': float(employee[12]),
+                  'comm': float(employee[13])
+              }
+              return jsonify(employee_data)
+          else:
+              return jsonify({'error': 'Employee not found'}), 404
+      except Exception as e:
+          return jsonify({'error': str(e)}), 500
+
+  if __name__ == '__main__':
+      app.run(debug=True)
+  ```
+
+  This version of the API includes a dynamic route that captures `EMPNO` from the URL. It uses this `EMPNO` to query the `SAMPLE.EMPLOYEE` table for a specific employee's details. If an employee with the given `EMPNO` is found, their details are returned as JSON. Otherwise, a 404 error with a message indicating that the employee was not found is returned.
+
+  This approach allows for the retrieval of individual employee details in a more secure and efficient manner, providing a clear example of how Flask can be used to create RESTful APIs that interact with IBM i's DB2 database based on specific query parameters.
+
+  </TabItem>
+  <TabItem label="Custom URL Shortener">
+    A Flask application that accepts URLs, generates a short URL, logs the details to a DB2 table, and returns the shortened URL.
+
+    ```python title="url_shortener.py"
+    from flask import Flask, request, jsonify, redirect
+    import ibm_db_dbi
+    import hashlib
+
+    app = Flask(__name__)
+
+    @app.route('/shorten', methods=['POST'])
+    def shorten_url():
+        original_url = request.json['url']
+        # Generate a hash of the URL for simplicity
+        hash_object = hashlib.sha1(original_url.encode())
+        shortened_url = hash_object.hexdigest()[:6]  # Use the first 6 characters for the short URL
+
+        try:
+            conn = ibm_db_dbi.connect()
+            cursor = conn.cursor()
+            sql = "INSERT INTO SHORTURLS (ORIGINAL_URL, SHORTENED_URL) VALUES (?, ?)"
+            cursor.execute(sql, (original_url, shortened_url))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return jsonify({'original_url': original_url, 'shortened_url': f"http://yourdomain.com/{shortened_url}"})
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    @app.route('/<short_code>')
+    def redirect_to_original(short_code):
+        try:
+            conn = ibm_db_dbi.connect()
+            cursor = conn.cursor()
+            sql = "SELECT ORIGINAL_URL FROM SHORTURLS WHERE SHORTENED_URL = ?"
+            cursor.execute(sql, (short_code,))
+            result = cursor.fetchone()
+            cursor.close()
+            conn.close()
+
+            if result:
+                original_url = result[0]
+                return redirect(original_url, code=302)
+            else:
+                return jsonify({'error': 'Short URL not found'}), 404
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    if __name__ == '__main__':
+        app.run(debug=True)
+    ```
+    <Aside type="note">
+      This example assumes you have a table (_[API Example - Enhanced with DB2](../requests/#api-examples)_) called `SHORTURLS` with columns `ORIGINAL_URL` and `SHORTENED_URL`. Make sure to adjust the domain in the returned `shortened_url` to your actual domain where the shortened URLs will be redirected.
+    </Aside>
+  </TabItem>
+</Tabs>
+
+## Conclusion
+
+Hosting your own APIs with Python and Flask on IBM i is not just about making data accessible; it's a step towards modernizing IBM i applications, making them more flexible, and integrating them into broader application ecosystems. Flask's simplicity and ease of use, combined with Python's power and versatility on IBM i, make it an excellent choice for developing web services.
