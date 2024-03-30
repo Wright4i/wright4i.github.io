@@ -35,16 +35,8 @@ pip3 install openpyxl
 
 Create an Excel template with headers, colors, and formulas.
 
-_Example Template (`template.xlsx`):_
-
-|   | A         | B            | C                                  | D       | E          |
-|---|-----------|--------------|------------------------------------|---------|------------|
-| 1 |           |              | Employee Records                   |         |            |      
-| 2 |           |              |                                    |         |            |
-| 3 |           |              | =TEXT(NOW(), "dddd, mmmm d, yyyy") |         |            |    
-| 4 |           |              |                                    |         |            |
-| 5 | **EMPNO** | **FIRSTNME** | **LASTNAME**                       | **JOB** | **SALARY** |
-| 6 |           |              |                                    |         |            |
+_Example Template ([`template.xlsx`](../../../../assets/template.xlsx)):_
+![Template Image](../../../../assets/openpyxl_1.png)
 
 ## Python Script for Generating Reports
 
@@ -54,9 +46,20 @@ This script fetches data from the `SAMPLE.EMPLOYEE` table and populates the Exce
 import argparse
 import openpyxl
 import ibm_db_dbi
-import re
+from copy import copy
 
-def generate_report(template_path, output_path, cell_data_start="A1"):
+def copy_cell_formatting(source_cell, target_cell):
+    """
+    Copies all formatting from source_cell to target_cell.
+    """
+    target_cell.font = copy(source_cell.font)
+    target_cell.border = copy(source_cell.border)
+    target_cell.fill = copy(source_cell.fill)
+    target_cell.number_format = copy(source_cell.number_format)
+    target_cell.protection = copy(source_cell.protection)
+    target_cell.alignment = copy(source_cell.alignment)
+
+def generate_report(template_path, output_path, data_start="A1"):
     # Load the workbook and select the active worksheet
     wb = openpyxl.load_workbook(template_path)
     ws = wb.active
@@ -69,16 +72,19 @@ def generate_report(template_path, output_path, cell_data_start="A1"):
     sql = "SELECT EMPNO, FIRSTNME, LASTNAME, JOB, SALARY FROM SAMPLE.EMPLOYEE"
     cursor.execute(sql)
 
-    # Parse the cell_data_start to get row and column correctly for any column
-    match = re.match(r"([A-Za-z]+)([0-9]+)", cell_data_start)
-    column, row = match.groups()
+    # Parse the data_start to get row and column correctly for any column
+    column, row = data_start[0], data_start[1:]
     start_row = int(row)
     start_col = openpyxl.utils.column_index_from_string(column)
 
-    # Insert data into the worksheet starting from cell_data_start
+    # Insert data into the worksheet starting from data_start
     for row_index, db_row in enumerate(cursor, start=start_row):
         for col_index, value in enumerate(db_row, start=start_col):
-            ws.cell(row=row_index, column=col_index, value=value)
+            # The template cell for formatting is in the first row (data_start row)
+            template_cell = ws.cell(row=start_row, column=col_index)
+            target_cell = ws.cell(row=row_index, column=col_index, value=value)
+            # Copy formatting from the template cell to the new cell
+            copy_cell_formatting(template_cell, target_cell)
 
     # Close the database cursor and connection
     cursor.close()
@@ -91,11 +97,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate an Excel report from DB2 data.")
     parser.add_argument("template_path", help="Path to the Excel template file.")
     parser.add_argument("output_path", help="Path where the output Excel file will be saved.")
-    parser.add_argument("--cell_data_start", help="Cell position where data insertion begins (e.g., 'A6').", default="A1")
+    parser.add_argument("--data-start", default="A1", help="Cell position where data insertion begins (e.g., 'A6').")
 
     args = parser.parse_args()
 
-    generate_report(args.template_path, args.output_path, args.cell_data_start)
+    generate_report(args.template_path, args.output_path, args.data_start)
 ```
 
 ## Running the Script
@@ -103,8 +109,11 @@ if __name__ == "__main__":
 Execute the script to generate your report:
 
 ```bash
-python3 generate_employee_report.py /tmp/template.xlsx /tmp/output.xlsx A6
+python3 generate_employee_report.py /tmp/template.xlsx /tmp/output.xlsx --data-start B6
 ```
+
+_Example Output ([`output.xlsx`](../../../../assets/output.xlsx)):_
+![Template Output](../../../../assets/openpyxl_2.png)
 
 ## Conclusion
 
