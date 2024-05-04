@@ -1,0 +1,6 @@
+---
+import GuidesList from '../components/GuidesList.astro';
+const Guides = import.meta.glob('/src/content/docs/resources/*.{md,mdx}');
+---
+
+<GuidesList guidesGlob={Guides} title="Resources" directory="resources" />
