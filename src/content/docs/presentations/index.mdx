@@ -1,6 +1,49 @@
 ---
-title: ''
-description: Landing Page
+title: 'Presentations'
+description: Presentations
 sidebar:
     hidden: true
+hero:
+  tagline: 'PDFs available for download:'
 ---
+
+import { Card, CardGrid, Aside, LinkCard, Icon } from '@astrojs/starlight/components';
+
+<CardGrid stagger>
+  <Card>
+    <div class="grid-1">
+      <a class="grid-button" href="../../../Using AI as your Co-Developer.pdf">
+        <div class="grid-item color-bg color-ruby">
+           Using AI as your Co-Developer <Icon name="right-caret" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+	</Card>
+	<Card>
+    <div class="grid-1">
+      <a class="grid-button" href="../../../Training LLMs for RPG.pdf">
+        <div class="grid-item color-bg color-sapphire">
+          Training LLMs for RPG <Icon name="right-caret" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+	</Card>
+  <Card>
+    <div class="grid-1">
+      <a class="grid-button" href="../../../Essential Python on IBM i.pdf">
+        <div class="grid-item color-bg color-emerald">
+          Essential Skills - Python <Icon name="right-caret" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+	</Card>
+  <Card>
+    <div class="grid-1">
+      <a class="grid-button" href="../../../Level Up Your RPG with Python.pdf">
+        <div class="grid-item color-bg color-amethyst">
+          Level Up Your RPG with Python <Icon name="right-caret" class="icon-inline" />
+        </div>
+      </a>
+    </div>
+	</Card>
+</CardGrid>
