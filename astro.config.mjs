@@ -46,8 +46,7 @@ export default defineConfig({
 				},
 				{
 					label: 'Presentations',
-					autogenerate: { directory: '/presentations/' },
-					collapsed: true,
+					link: '/presentations/', 
 				},
 				{
 					label: 'Blog',
