@@ -36,11 +36,11 @@ export default defineConfig({
 						variant: 'success'
 					},
 					items: [
-						{ label: 'RPG', autogenerate: { directory: '/guides/rpg/' } },
+						// { label: 'RPG', autogenerate: { directory: '/guides/rpg/' } },
 						{ label: 'Python', autogenerate: { directory: '/guides/py/' } },
-						{ label: 'Node', autogenerate: { directory: '/guides/node/' } },
-						{ label: 'Web Frontend', autogenerate: { directory: '/guides/web/' } },
-						{ label: 'More', autogenerate: { directory: '/guides/more/' } },
+						// { label: 'Node', autogenerate: { directory: '/guides/node/' } },
+						// { label: 'Web Frontend', autogenerate: { directory: '/guides/web/' } },
+						// { label: 'More', autogenerate: { directory: '/guides/more/' } },
 					],
 					collapsed: false,
 				},
@@ -48,16 +48,16 @@ export default defineConfig({
 					label: 'Presentations',
 					link: '/presentations/', 
 				},
-				{
-					label: 'Blog',
-					autogenerate: { directory: '/blog/' },
-					collapsed: true,
-				},
-				{
-					label: 'Resources',
-					autogenerate: { directory: '/resources/'},
-					collapsed: true,
-				},
+				// {
+				// 	label: 'Blog',
+				// 	autogenerate: { directory: '/blog/' },
+				// 	collapsed: true,
+				// },
+				// {
+				// 	label: 'Resources',
+				// 	autogenerate: { directory: '/resources/'},
+				// 	collapsed: true,
+				// },
 				{
 					label: 'About me',
 					link: '/about/', 

@@ -1,0 +1,603 @@
+---
+title: "Workshop: Python & APIs on IBM i"
+template: splash
+sidebar:
+    order: 6
+---
+
+import { Aside, CardGrid, Card, Icon, LinkCard} from '@astrojs/starlight/components';
+
+## Requirements
+
+You must **B**ring **Y**our **O**wn **D**evice and have access to an IBM i.
+
+## Goals
+* Understand APIs & Documentation <Icon name="approve-check-circle" class="icon-inline color-jade" />
+* Host an API locally with Python <Icon name="approve-check-circle" class="icon-inline color-jade" />
+* Consume an API with Python <Icon name="approve-check-circle" class="icon-inline color-jade" />
+* Learn the basics of Authentication <Icon name="approve-check-circle" class="icon-inline color-jade" />
+
+## RESTful API Basics
+REST (Representational State Transfer) is a way to design networked applications. It uses HTTP requests to perform operations like Create, Read, Update, and Delete (CRUD) on resources identified by URLs.
+
+Key principles of REST:
+- **Stateless**: Each request from client to server must contain all the information needed to understand and process the request.
+- **Client-Server**: The client and server are independent and can be developed separately.
+- **Cacheable**: Responses must define themselves as cacheable or not to prevent clients from reusing stale or inappropriate data.
+- **Uniform Interface**: Resources are identified in the request, and the operations are defined by HTTP methods (GET, POST, PUT, DELETE, etc.).
+
+In summary, RESTful APIs provide a standardized way for systems to communicate over HTTP using a set of well-defined operations and principles.
+
+### Methods
+<CardGrid>
+<Card title="GET" icon="list-format">
+The GET method retrieves data from the server.
+</Card>
+<Card title="PUT" icon="add-document">
+The PUT method replaces all current representations of the target resource with the request payload.
+</Card>
+<Card title="PATCH" icon="pen">
+The PATCH method is used to apply partial modifications to a resource.
+</Card>
+<Card title="POST" icon="document">
+The POST method is used update an existing resource or create a new resource.
+</Card>
+<Card title="DELETE" icon="bitbucket">
+The DELETE method deletes the specified resource.
+</Card>
+<Card title="HEAD/OPTIONS/TRACE/CONNECT" icon="puzzle">
+Less commonly used methods for various purposes like checking the server status, options available, tracing the request, and establishing a tunnel.
+</Card>
+</CardGrid>
+
+### Status Codes
+<CardGrid>
+<Card title="200 OK" icon="approve-check">
+The request has succeeded.
+</Card>
+<Card title="201 Created" icon="approve-check">
+The request has been fulfilled and has resulted in one or more new resources being created.
+</Card>
+<Card title="400 Bad Request" icon="close">
+The server cannot or will not process the request due to an apparent client close.
+</Card>
+<Card title="401 Unauthorized" icon="close">
+Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
+</Card>
+<Card title="404 Not Found" icon="close">
+The requested resource could not be found but may be available in the future.
+</Card>
+<Card title="500 Internal Server Error" icon="error">
+A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
+</Card>
+</CardGrid>
+
+## APIs Visualized
+Swagger UI is a popular tool for visualizing APIs. It provides a user-friendly interface to interact with APIs and understand their endpoints and data structures.
+
+If an API has an OpenAPI formatted yml or json file, you can use Swagger UI to visualize it.
+
+<LinkCard title="View API Playground's API" href="https://editor.swagger.io/?url=https://gist.githubusercontent.com/Wright4i/06184a609ee80090466fe2c8a6f0c468/raw/9d0601690232250713300bb7eec6ae7dbd07f2ef/playground.yml" description="editor.swagger.io" />
+
+![API Playground Swagger](./public/api_workshop/api-playground-swagger.png)
+
+
+## Setting up your Environment
+
+<LinkCard title="Download & install Python" href="https://www.python.org/downloads" description="python.org/downloads" />
+
+<LinkCard title="Download & install VS Code" href="https://code.visualstudio.com/download" description="code.visualstudio.com/download" />
+
+<LinkCard title="Download & install the Python extension for VS Code" href="https://marketplace.visualstudio.com/items?itemName=ms-python.python" description="marketplace.visualstudio.com/items?itemName=ms-python.python" />
+
+<LinkCard title="Download & install the Thunder Client extension" href="https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client" description="marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client" />
+
+<LinkCard title="[Optional] Download & install Code for IBM i" href="https://marketplace.visualstudio.com/items?itemName=HalcyonTechLtd.ibm-i-development-pack" description="marketplace.visualstudio.com/items?itemName=HalcyonTechLtd.ibm-i-development-pack" />
+
+<Aside type="note">
+In this guide, we use `python` and `pip` commands. Depending on your system configuration, `python` might refer to Python 2. If that's the case, you may need to use `python3` and `pip3` instead.
+</Aside>
+
+### Project Setup
+<CardGrid stagger>
+<Card title="Step #1" icon="add-document">
+Create a new folder for your project.
+</Card>
+
+<Card title="Step #2" icon="open-book">
+Open Visual Studio Code and select "Open Folder" to open your project folder.
+</Card>
+
+<Card title="Step #3" icon="forward-slash">
+Open the terminal (`` Ctrl + ` `` in VS Code).
+</Card>
+
+<Card title="Step #4" icon="laptop">
+Create a new virtual environment: 
+```shell
+python -m venv --system-site-packages venv
+```
+<Aside type="note">
+Virtual environments are used to manage dependencies for your projects.
+</Aside>
+</Card>
+
+<Card title="Step #5" icon="rocket">
+Activate your virtual environment:
+    - On PASE (IBM i):
+        ```shell
+        . venv/bin/activate
+        ```
+    - On macOS/Linux:
+        ```shell
+        source venv/bin/activate
+        ```
+    - On Windows:
+        ```shell
+        venv\Scripts\activate
+        ```
+</Card>
+</CardGrid>
+
+## Setting up a Basic Flask Application
+
+<Card>
+### Step 1: Create a new file `hello.py`
+```python
+// hello.py
+
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return 'Hello, World!'
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
+```
+
+We start by importing the Flask module and creating a new instance of the Flask class. We then define a route for the root URL `/` that returns the string "Hello, World!".
+
+<Aside type="note">
+```python 
+if __name__ == '__main__':
+```
+This construct is a common Python idiom that allows you to control the execution of code based on whether the script is run directly or imported as a module. 
+</Aside>
+</Card>
+
+<Card>
+### Step 2: Run your Flask app
+```shell
+python hello.py
+```
+</Card>
+
+<Card>
+### Step 3: Open your browser
+Navigate to [http://localhost:5000](http://localhost:5000). You should see "Hello, World!".
+
+<Aside type="tip">
+GET endpoints can be tested directly in your browser! 
+For other methods like POST, PUT, PATCH, and DELETE, you can use tools like Thunder Client or Postman.
+</Aside>
+</Card>
+
+## Setting up the Database Connection
+
+<Card>
+### Step 1: Install additional packages
+```shell
+pip install python-dotenv pyodbc
+```
+</Card>
+
+<Card>
+### Step 2: Create a new file `.env`
+```shell
+// .env
+
+PORT=5000
+DB_HOST=hostname
+DB_ID=your_user
+DB_PASSWORD=your_password
+DB_NAME=SAMPLE
+```
+</Card>
+
+<Card>
+### Step 3: Copy this to a new file `db.py` 
+<Aside type="tip">
+Hover over the top-right corner of code blocks for a clipboard button <Icon name="right-arrow" class="icon-inline color-amethyst-high" />
+</Aside>
+```python
+// db.py
+
+import os
+import pyodbc
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class Database:
+    def __init__(self):
+        self.user = os.getenv('DB_ID')
+        self.password = os.getenv('DB_PASSWORD')
+        self.database = os.getenv('DB_NAME')
+
+    def __enter__(self):
+        self.conn = pyodbc.connect(
+            f"DRIVER={{IBM i Access ODBC Driver}};SYSTEM={os.getenv('DB_HOST')};"
+            f"UID={os.getenv('DB_ID')};PWD={os.getenv('DB_PASSWORD')}"
+        )
+        self.cursor = self.conn.cursor()
+        return self.cursor
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.cursor.close()
+        self.conn.close()
+
+def get_db():
+    return Database()
+```
+</Card>
+
+## Creating API Endpoints
+
+<Card>
+### GET /employees
+Create a new program `host.py`
+
+Here's an example of a simple API that returns a list of employees from the `SAMPLE.EMPLOYEE` table:
+
+```python
+// host.py
+
+from flask import Flask, jsonify, request
+from db import get_db
+
+app = Flask(__name__)
+
+@app.route('/employees', methods=['GET'])
+def get_employees():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        select 
+            empno as "id",
+            firstnme as "first",
+            lastname as "last",
+            job as "job",
+            workdept as "workdept",
+            salary as "salary"
+        from sample.employee
+    """)
+    rows = cursor.fetchall()
+
+    employee_list = []
+    for row in rows:
+        employee_list.append(row)
+    
+    return jsonify(employee_list)
+
+if __name__ == '__main__':
+    app.run(debug=True, port=int(os.getenv('PORT')))
+```
+</Card>
+
+<Card>
+### GET /employees/`{id}`
+Add the following route to `host.py` to retrieve a specific employee by their ID:
+```python
+// host.py
+
+@app.route('/employees/<id>', methods=['GET'])
+def get_employee(id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        select 
+            empno as "id",
+            firstnme as "first",
+            lastname as "last",
+            job as "job",
+            workdept as "workdept",
+            salary as "salary"
+        from sample.employee
+        where empno = ?
+    """, (id,))
+    employee = cursor.fetchone()
+
+    if employee:
+        employee_dict = {
+            "id": employee[0],
+            "first": employee[1],
+            "last": employee[2],
+            "job": employee[3],
+            "workdept": employee[4],
+            "salary": employee[5]
+        }
+        return jsonify(employee_dict)
+    else:
+        return jsonify({"error": "Employee not found"}), 404
+```
+</Card>
+
+<Card>
+### GET /departments/`{id}`
+Add the following route to `host.py` to retrieve a specific department by its ID:
+```python
+// host.py
+
+@app.route('/departments/<id>', methods=['GET'])
+def get_department(id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        select 
+            deptno as "id",
+            deptname as "name",
+            location as "location",
+            mgrno as "manager"
+        from sample.department
+        where deptno = ?
+    """, (id,))
+    department = cursor.fetchone()
+
+    if department:
+        department_dict = {
+            "id": department[0],
+            "name": department[1],
+            "location": department[2],
+            "mgrno": department[3]
+        }
+        return jsonify(department_dict)
+    else:
+        return jsonify({"error": "Department not found"}), 404
+```
+</Card>
+
+## Testing your API
+Before we move onto other REST methods, let's cover how to test your API with tools that are available to you.
+
+<CardGrid>
+<Card>
+### Thunder Client
+Use the extension in VS Code to test your API endpoints. 
+* Create a `New Request` and 
+* Specify the Method (GET/PUT/PATCH) and URL (ex. `http://localhost:5000/employees`)
+* Add any headers or body data.
+* Click `Send Request` to see the response.
+<iframe width="480px" src="https://www.youtube.com/embed/NKZ0ahNbmak" title="Thunder Client - Lightweight Rest API Client Extension for VS Code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</Card>
+
+<Card>
+### API Playground
+A hosted web-based API playground is available for you to test your API endpoints both sending and receiving data.
+
+<div class="grid-1">
+      <a class="grid-button" href="http://magic.magic-ug.org:10500">
+        <div class="grid-item color-dark-bg color-amethyst"> 
+          Hosted @ MAGiC (magic.magic-ug.org:10500) <Icon name="external" class="icon-inline" />
+        </div>
+      </a>
+      <a class="grid-button" href="https://github.com/Wright4i/api-playground">
+        <div class="grid-item color-dark-bg color-garnet"> 
+          Host it Yourself (see: README) <Icon name="external" class="icon-inline" />
+        </div>
+    </a>
+</div>
+</Card>
+</CardGrid>
+
+<Card>
+### PATCH /departments/`{id}`
+Add the following route to `host.py` to update the manager for a specific department by its ID using a PATCH request:
+```python
+// host.py
+
+@app.route('/departments/<id>', methods=['PATCH'])
+def update_department(id):
+    data = request.get_json()
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("""
+            SELECT 
+                deptno as "id",
+                deptname as "name",
+                location as "location",
+                mgrno as "manager"
+            FROM sample.department
+            WHERE deptno = ?
+        """, (id,))
+        department = cursor.fetchone()
+
+        if department:
+            cursor.execute(
+                """
+                UPDATE sample.department 
+                SET deptname = ?, location = ?, mgrno = ? 
+                WHERE deptno = ?
+                """,
+                (data['name'], data['location'], data['manager'], id)
+            )
+            conn.commit()
+
+            updated_department = {
+                "id": id,
+                "name": data['name'],
+                "location": data['location'],
+                "manager": data['manager']
+            }
+            return jsonify(updated_department)
+        else:
+            return jsonify({"error": "Department not found"}), 404
+    finally:
+        cursor.close()
+        conn.close()
+```
+</Card>
+
+## Consuming an API
+
+<Card>
+To consume an API, you can use the popular `requests` library in Python. Install it using:
+```shell
+pip install requests
+```
+</Card>
+
+<Card>
+### GET /employees
+First, create a new file `consume.py` and add the following code to retrieve the list of employees:
+```python
+// consume.py
+
+import requests
+
+# Get the list of employees
+response = requests.get('http://localhost:5000/employees')
+if response.status_code == 200:
+    employees = response.json()
+    print("Employees:", employees)
+else:
+    print("Failed to retrieve employees:", response.status_code)
+```
+
+This script sends a GET request to the `/employees` endpoint and prints the list of employees if the request is successful.
+
+</Card>
+<Aside type="note">
+You can either run your original `host.py` script or try out the hosted API Playground to test this script out `http://magic.magic-ug.org:10500/` with the `/employees` endpoint and `/departments` endpoint.
+</Aside>
+
+<Card>
+### PUT /employees
+Next, add code to `consume.py` to add your own employee details using a PUT request:
+```python
+// consume.py
+
+# Define the new employee data
+new_employee = {
+    "first": "John",
+    "last": "Doe",
+    "job": "Software Developer",
+    "workdept": "IT",
+    "salary": 100000
+}
+
+# Send the PUT request to add the new employee
+response = requests.put('http://localhost:5000/employees', json=new_employee)
+if response.status_code == 200:
+    created_employee = response.json()
+    print("Employee added successfully. Your new Employee ID is:", created_employee['id'])
+else:
+    print("Failed to add employee:", response.status_code)
+```
+
+This script sends a PUT request to the `/employees` endpoint with the new employee data and prints the ID of the newly created employee if the request is successful.
+
+</Card>
+
+## GET & PATCH /departments
+
+<Card>
+To retrieve the list of departments and update the manager for departments where the manager is '101', follow these steps:
+
+### GET /departments then PATCH /departments
+```python 
+// consume.py
+
+# Get the list of departments
+response = requests.get('http://localhost:5000/departments')
+if response.status_code == 200:
+    departments = response.json()
+    print("Departments:", departments)
+else:
+    print("Failed to retrieve departments:", response.status_code)
+
+# Update departments where the manager is '101'
+for department in departments:
+    if department['manager'] == '101':
+        department['manager'] = '121'
+        patch_response = requests.patch(f"http://localhost:5000/departments/{department['id']}", json=department)
+        if patch_response.status_code == 200:
+            print(f"Updated department {department['id']} successfully.")
+        else:
+            print(f"Failed to update department {department['id']}: {patch_response.status_code}")
+```
+
+This script demonstrates taking the results of one API to feed another subsequent API call.
+
+In this fictional scenario, we're updating the manager for departments where the manager is '101' to '121' without knowing the department IDs in advance.
+
+</Card>
+
+## Basics of Authentication
+
+<Card>
+### Common Types
+- **Basic Authentication**: This method involves sending the username and password encoded in Base64 in the `Authorization` header.
+- **Bearer Token**: This method uses a token that is generated by the server and sent in the `Authorization` header. The token is usually a JWT (JSON Web Token).
+- **API Key**: This method involves sending a unique key, usually in the query parameters or headers, to authenticate requests.
+</Card>
+
+<Card>
+### Testing Auth Tokens
+To test Auth Tokens add the `Authorization` header to your requests. 
+
+If your client supports it, there might be a dedicated tab for Auth. Refer to the screenshot for using a bearer token in Thunder Client.
+
+![Thunder Client Auth Token](./public/api_workshop/thunder-client-auth-token.png)
+</Card>
+
+<Card>
+### Sending a Bearer Token in your GET request to /employees
+To send a bearer token in your GET request to /employees, you need to include the Authorization header with the token when calling requests. 
+
+```python 
+// consume.py
+
+import requests
+
+# Define the bearer token
+token = 'your_token_here'
+
+# Set the headers with the Authorization token
+headers = { 'Authorization': f'Bearer {token}' }
+
+# Get the list of employees
+response = requests.get('http://localhost:5000/employees', headers=headers)
+if response.status_code == 200:
+    employees = response.json()
+    print("Employees:", employees)
+else:
+    print("Failed to retrieve employees:", response.status_code)
+```
+Replace 'your_token_here' with your actual bearer token. This script sends a GET request to the /employees endpoint with the bearer token included in the Authorization header.
+</Card>
+
+<Aside type="danger">
+Don't actually hard code your authentication tokens in your code. Use environment variables or a secure database to store and retrieve them. This is just for demonstration purposes.
+</Aside>
+
+<Card>
+#### Generating a Auth Token with API Playground
+![API Playground Valid Token](./public/api_workshop/api-playground-generate-token.png)
+
+#### Send a HTTP request to `/employees` or `/departments` with the Auth Token and watch it populate on the Receive Tab
+![API Playground Valid Token](./public/api_workshop/api-playground-receive-tab.png)
+
+#### Using the Receive Tab click the Token button to view the validity of the token
+![API Playground Valid Token](./public/api_workshop/api-playground-view-token.png)
+</Card>
+
+# Congratulations! 🎉 
+
+You've successfully set up a basic Flask application, created API endpoints, consumed those APIs, and learned about authentication.
+
+This is for you! <Icon name="star" class="icon-inline color-topaz" />

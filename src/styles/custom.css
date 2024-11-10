@@ -37,85 +37,278 @@
 
 /* Wright4i's Family of Jewels */
 :root {
-	/* Ruby */
-	--w4i-color-ruby: hsl(0, 100%, 40%);
-	--w4i-color-ruby-low: hsl(0, 100%, 30%);
-	--w4i-color-ruby-high: hsl(0, 100%, 50%);
+    /* Ruby */
+    --w4i-color-ruby: hsl(0, 100%, 40%);
+    --w4i-color-ruby-low: hsl(0, 100%, 30%);
+    --w4i-color-ruby-high: hsl(0, 100%, 50%);
   
-	/* Sapphire */
-	--w4i-color-sapphire: hsl(240, 100%, 30%);
-	--w4i-color-sapphire-low: hsl(240, 100%, 20%);
-	--w4i-color-sapphire-high: hsl(240, 100%, 40%);
+    /* Sapphire */
+    --w4i-color-sapphire: hsl(240, 100%, 30%);
+    --w4i-color-sapphire-low: hsl(240, 100%, 20%);
+    --w4i-color-sapphire-high: hsl(240, 100%, 40%);
   
-	/* Emerald */
-	--w4i-color-emerald: hsl(140, 100%, 30%);
-	--w4i-color-emerald-low: hsl(140, 100%, 20%);
-	--w4i-color-emerald-high: hsl(140, 100%, 40%);
+    /* Emerald */
+    --w4i-color-emerald: hsl(140, 100%, 30%);
+    --w4i-color-emerald-low: hsl(140, 100%, 20%);
+    --w4i-color-emerald-high: hsl(140, 100%, 40%);
   
-	/* Amethyst */
-	--w4i-color-amethyst: hsl(270, 100%, 40%);
-	--w4i-color-amethyst-low: hsl(270, 100%, 30%);
-	--w4i-color-amethyst-high: hsl(270, 100%, 50%);
+    /* Amethyst */
+    --w4i-color-amethyst: hsl(270, 100%, 40%);
+    --w4i-color-amethyst-low: hsl(270, 100%, 30%);
+    --w4i-color-amethyst-high: hsl(270, 100%, 50%);
   
-	/* Topaz */
-	--w4i-color-topaz: hsl(45, 100%, 50%);
-	--w4i-color-topaz-low: hsl(45, 100%, 40%);
-	--w4i-color-topaz-high: hsl(45, 100%, 60%);
+    /* Topaz */
+    --w4i-color-topaz: hsl(45, 100%, 50%);
+    --w4i-color-topaz-low: hsl(45, 100%, 40%);
+    --w4i-color-topaz-high: hsl(45, 100%, 60%);
   
-	/* Aquamarine */
-	--w4i-color-aquamarine: hsl(180, 100%, 75%);
-	--w4i-color-aquamarine-low: hsl(180, 100%, 65%);
-	--w4i-color-aquamarine-high: hsl(180, 100%, 85%);
+    /* Aquamarine */
+    --w4i-color-aquamarine: hsl(180, 100%, 75%);
+    --w4i-color-aquamarine-low: hsl(180, 100%, 65%);
+    --w4i-color-aquamarine-high: hsl(180, 100%, 85%);
   
-	/* Citrine */
-	--w4i-color-citrine: hsl(60, 100%, 50%);
-	--w4i-color-citrine-low: hsl(60, 100%, 40%);
-	--w4i-color-citrine-high: hsl(60, 100%, 60%);
+    /* Citrine */
+    --w4i-color-citrine: hsl(60, 100%, 50%);
+    --w4i-color-citrine-low: hsl(60, 100%, 40%);
+    --w4i-color-citrine-high: hsl(60, 100%, 60%);
   
-	/* Garnet */
-	--w4i-color-garnet: hsl(345, 100%, 40%);
-	--w4i-color-garnet-low: hsl(345, 100%, 30%);
-	--w4i-color-garnet-high: hsl(345, 100%, 50%);
+    /* Garnet */
+    --w4i-color-garnet: hsl(345, 100%, 40%);
+    --w4i-color-garnet-low: hsl(345, 100%, 30%);
+    --w4i-color-garnet-high: hsl(345, 100%, 50%);
   
-	/* Peridot */
-	--w4i-color-peridot: hsl(90, 100%, 40%);
-	--w4i-color-peridot-low: hsl(90, 100%, 30%);
-	--w4i-color-peridot-high: hsl(90, 100%, 50%);
+    /* Peridot */
+    --w4i-color-peridot: hsl(90, 100%, 40%);
+    --w4i-color-peridot-low: hsl(90, 100%, 30%);
+    --w4i-color-peridot-high: hsl(90, 100%, 50%);
   
-	/* Opal */
-	--w4i-color-opal: hsl(210, 100%, 80%);
-	--w4i-color-opal-low: hsl(210, 100%, 70%);
-	--w4i-color-opal-high: hsl(210, 100%, 90%);
+    /* Opal */
+    --w4i-color-opal: hsl(210, 100%, 80%);
+    --w4i-color-opal-low: hsl(210, 100%, 70%);
+    --w4i-color-opal-high: hsl(210, 100%, 90%);
   
-	/* Turquoise */
-	--w4i-color-turquoise: hsl(174, 72%, 40%);
-	--w4i-color-turquoise-low: hsl(174, 72%, 30%);
-	--w4i-color-turquoise-high: hsl(174, 72%, 50%);
+    /* Turquoise */
+    --w4i-color-turquoise: hsl(174, 72%, 40%);
+    --w4i-color-turquoise-low: hsl(174, 72%, 30%);
+    --w4i-color-turquoise-high: hsl(174, 72%, 50%);
   
-	/* Pearl */
-	--w4i-color-pearl: hsl(30, 25%, 80%);
-	--w4i-color-pearl-low: hsl(30, 25%, 70%);
-	--w4i-color-pearl-high: hsl(30, 25%, 90%);
+    /* Pearl */
+    --w4i-color-pearl: hsl(30, 25%, 80%);
+    --w4i-color-pearl-low: hsl(30, 25%, 70%);
+    --w4i-color-pearl-high: hsl(30, 25%, 90%);
   
-	/* Moonstone */
-	--w4i-color-moonstone: hsl(0, 25%, 80%);
-	--w4i-color-moonstone-low: hsl(0, 25%, 70%);
-	--w4i-color-moonstone-high: hsl(0, 25%, 90%);
+    /* Moonstone */
+    --w4i-color-moonstone: hsl(0, 25%, 80%);
+    --w4i-color-moonstone-low: hsl(0, 25%, 70%);
+    --w4i-color-moonstone-high: hsl(0, 25%, 90%);
 
-	/* Onyx */
-	--w4i-color-onyx: hsl(0, 0%, 10%);
-	--w4i-color-onyx-low: hsl(0, 0%, 5%);
-	--w4i-color-onyx-high: hsl(0, 0%, 20%);
+    /* Onyx */
+    --w4i-color-onyx: hsl(0, 0%, 10%);
+    --w4i-color-onyx-low: hsl(0, 0%, 5%);
+    --w4i-color-onyx-high: hsl(0, 0%, 20%);
   
-	/* Jade */
-	--w4i-color-jade: hsl(150, 65%, 40%);
-	--w4i-color-jade-low: hsl(150, 65%, 30%);
-	--w4i-color-jade-high: hsl(150, 65%, 50%);
+    /* Jade */
+    --w4i-color-jade: hsl(150, 65%, 40%);
+    --w4i-color-jade-low: hsl(150, 65%, 30%);
+    --w4i-color-jade-high: hsl(150, 65%, 50%);
   
-	/* Lapis Lazuli */
-	--w4i-color-lapis-lazuli: hsl(210, 75%, 40%);
-	--w4i-color-lapis-lazuli-low: hsl(210, 75%, 30%);
-	--w4i-color-lapis-lazuli-high: hsl(210, 75%, 50%);
+    /* Lapis Lazuli */
+    --w4i-color-lapis-lazuli: hsl(210, 75%, 40%);
+    --w4i-color-lapis-lazuli-low: hsl(210, 75%, 30%);
+    --w4i-color-lapis-lazuli-high: hsl(210, 75%, 50%);
+}
+
+/* Generic font color classes */
+.color-ruby {
+    color: var(--w4i-color-ruby);
+}
+
+.color-ruby-low {
+    color: var(--w4i-color-ruby-low);
+}
+
+.color-ruby-high {
+    color: var(--w4i-color-ruby-high);
+}
+
+.color-sapphire {
+    color: var(--w4i-color-sapphire);
+}
+
+.color-sapphire-low {
+    color: var(--w4i-color-sapphire-low);
+}
+
+.color-sapphire-high {
+    color: var(--w4i-color-sapphire-high);
+}
+
+.color-emerald {
+    color: var(--w4i-color-emerald);
+}
+
+.color-emerald-low {
+    color: var(--w4i-color-emerald-low);
+}
+
+.color-emerald-high {
+    color: var(--w4i-color-emerald-high);
+}
+
+.color-amethyst {
+    color: var(--w4i-color-amethyst);
+}
+
+.color-amethyst-low {
+    color: var(--w4i-color-amethyst-low);
+}
+
+.color-amethyst-high {
+    color: var(--w4i-color-amethyst-high);
+}
+
+.color-topaz {
+    color: var(--w4i-color-topaz);
+}
+
+.color-topaz-low {
+    color: var(--w4i-color-topaz-low);
+}
+
+.color-topaz-high {
+    color: var(--w4i-color-topaz-high);
+}
+
+.color-aquamarine {
+    color: var(--w4i-color-aquamarine);
+}
+
+.color-aquamarine-low {
+    color: var(--w4i-color-aquamarine-low);
+}
+
+.color-aquamarine-high {
+    color: var(--w4i-color-aquamarine-high);
+}
+
+.color-citrine {
+    color: var(--w4i-color-citrine);
+}
+
+.color-citrine-low {
+    color: var(--w4i-color-citrine-low);
+}
+
+.color-citrine-high {
+    color: var(--w4i-color-citrine-high);
+}
+
+.color-garnet {
+    color: var(--w4i-color-garnet);
+}
+
+.color-garnet-low {
+    color: var(--w4i-color-garnet-low);
+}
+
+.color-garnet-high {
+    color: var(--w4i-color-garnet-high);
+}
+
+.color-peridot {
+    color: var(--w4i-color-peridot);
+}
+
+.color-peridot-low {
+    color: var(--w4i-color-peridot-low);
+}
+
+.color-peridot-high {
+    color: var(--w4i-color-peridot-high);
+}
+
+.color-opal {
+    color: var(--w4i-color-opal);
+}
+
+.color-opal-low {
+    color: var(--w4i-color-opal-low);
+}
+
+.color-opal-high {
+    color: var(--w4i-color-opal-high);
+}
+
+.color-turquoise {
+    color: var(--w4i-color-turquoise);
+}
+
+.color-turquoise-low {
+    color: var(--w4i-color-turquoise-low);
+}
+
+.color-turquoise-high {
+    color: var(--w4i-color-turquoise-high);
+}
+
+.color-pearl {
+    color: var(--w4i-color-pearl);
+}
+
+.color-pearl-low {
+    color: var(--w4i-color-pearl-low);
+}
+
+.color-pearl-high {
+    color: var(--w4i-color-pearl-high);
+}
+
+.color-moonstone {
+    color: var(--w4i-color-moonstone);
+}
+
+.color-moonstone-low {
+    color: var(--w4i-color-moonstone-low);
+}
+
+.color-moonstone-high {
+    color: var(--w4i-color-moonstone-high);
+}
+
+.color-onyx {
+    color: var(--w4i-color-onyx);
+}
+
+.color-onyx-low {
+    color: var(--w4i-color-onyx-low);
+}
+
+.color-onyx-high {
+    color: var(--w4i-color-onyx-high);
+}
+
+.color-jade {
+    color: var(--w4i-color-jade);
+}
+
+.color-jade-low {
+    color: var(--w4i-color-jade-low);
+}
+
+.color-jade-high {
+    color: var(--w4i-color-jade-high);
+}
+
+.color-lapis-lazuli {
+    color: var(--w4i-color-lapis-lazuli);
+}
+
+.color-lapis-lazuli-low {
+    color: var(--w4i-color-lapis-lazuli-low);
+}
+
+.color-lapis-lazuli-high {
+    color: var(--w4i-color-lapis-lazuli-high);
 }
   
 /* Icon on same line as text */
