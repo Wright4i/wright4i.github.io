@@ -95,7 +95,8 @@ If an API has an OpenAPI formatted yml or json file, you can use Swagger UI to v
 <LinkCard title="[Optional] Download & install Code for IBM i" href="https://marketplace.visualstudio.com/items?itemName=HalcyonTechLtd.ibm-i-development-pack" description="marketplace.visualstudio.com/items?itemName=HalcyonTechLtd.ibm-i-development-pack" />
 
 <Aside type="note">
-In this guide, we use `python` and `pip` commands. Depending on your system configuration, `python` might refer to Python 2. If that's the case, you may need to use `python3` and `pip3` instead.
+In this guide, we use `python3` and `pip3` commands. Depending on your system configuration, `python` might refer to Python 2. If that's the case, you need to use `python3` and `pip3` instead.
+You can get more specific by using `python3.6` or `python3.9` if you have multiple versions installed.
 </Aside>
 
 ### Project Setup
@@ -115,7 +116,7 @@ Open the terminal (`` Ctrl + ` `` in VS Code).
 <Card title="Step #4" icon="laptop">
 Create a new virtual environment: 
 ```shell
-python -m venv --system-site-packages venv
+python3 -m venv --system-site-packages venv
 ```
 <Aside type="note">
 Virtual environments are used to manage dependencies for your projects.
@@ -171,7 +172,7 @@ This construct is a common Python idiom that allows you to control the execution
 <Card>
 ### Step 2: Run your Flask app
 ```shell
-python hello.py
+python3 hello.py
 ```
 </Card>
 
@@ -190,7 +191,7 @@ For other methods like POST, PUT, PATCH, and DELETE, you can use tools like Thun
 <Card>
 ### Step 1: Install additional packages
 ```shell
-pip install python-dotenv pyodbc
+pip3 install python-dotenv pyodbc
 ```
 </Card>
 
@@ -447,7 +448,7 @@ def update_department(id):
 <Card>
 To consume an API, you can use the popular `requests` library in Python. Install it using:
 ```shell
-pip install requests
+pip3 install requests
 ```
 </Card>
 
