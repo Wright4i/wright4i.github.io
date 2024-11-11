@@ -185,7 +185,7 @@ python3 hello.py
 
 <Card>
 ### Step 3: Open your browser
-Navigate to [http://localhost:5000](http://localhost:5000). You should see "Hello, World!".
+Navigate to [http://127.0.0.1:5000](http://127.0.0.1:5000). You should see "Hello, World!".
 
 <Aside type="tip">
 GET endpoints can be tested directly in your browser! 
@@ -375,7 +375,7 @@ Before we move onto other REST methods, let's cover how to test your API with to
 ### Thunder Client
 Use the extension in VS Code to test your API endpoints. 
 * Create a `New Request` and 
-* Specify the Method (GET/PUT/PATCH) and URL (ex. `http://localhost:5000/employees`)
+* Specify the Method (GET/PUT/PATCH) and URL (ex. `http://127.0.0.1:5000/employees`)
 * Add any headers or body data.
 * Click `Send Request` to see the response.
 <iframe width="480px" src="https://www.youtube.com/embed/NKZ0ahNbmak" title="Thunder Client - Lightweight Rest API Client Extension for VS Code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -468,7 +468,7 @@ First, create a new file `consume.py` and add the following code to retrieve the
 import requests
 
 # Get the list of employees
-response = requests.get('http://localhost:5000/employees')
+response = requests.get('http://127.0.0.1:5000/employees')
 if response.status_code == 200:
     employees = response.json()
     print("Employees:", employees)
@@ -499,7 +499,7 @@ new_employee = {
 }
 
 # Send the PUT request to add the new employee
-response = requests.put('http://localhost:5000/employees', json=new_employee)
+response = requests.put('http://127.0.0.1:5000/employees', json=new_employee)
 if response.status_code == 200:
     created_employee = response.json()
     print("Employee added successfully. Your new Employee ID is:", created_employee['id'])
@@ -521,7 +521,7 @@ To retrieve the list of departments and update the manager for departments where
 // consume.py
 
 # Get the list of departments
-response = requests.get('http://localhost:5000/departments')
+response = requests.get('http://127.0.0.1:5000/departments')
 if response.status_code == 200:
     departments = response.json()
     print("Departments:", departments)
@@ -532,7 +532,7 @@ else:
 for department in departments:
     if department['manager'] == '101':
         department['manager'] = '121'
-        patch_response = requests.patch(f"http://localhost:5000/departments/{department['id']}", json=department)
+        patch_response = requests.patch(f"http://127.0.0.1:5000/departments/{department['id']}", json=department)
         if patch_response.status_code == 200:
             print(f"Updated department {department['id']} successfully.")
         else:
@@ -579,7 +579,7 @@ token = 'your_token_here'
 headers = { 'Authorization': f'Bearer {token}' }
 
 # Get the list of employees
-response = requests.get('http://localhost:5000/employees', headers=headers)
+response = requests.get('http://127.0.0.1:5000/employees', headers=headers)
 if response.status_code == 200:
     employees = response.json()
     print("Employees:", employees)
