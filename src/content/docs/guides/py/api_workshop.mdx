@@ -203,15 +203,15 @@ pip3 install python-dotenv pyodbc
 </Card>
 
 <Card>
-### Step 2: Create a new file `.env`
+### Step 2: Create a new file `.env` updating `USERNAME` and `PASSWORD`
 ```shell
 // .env
 
 PORT=5000
-DB_HOST=hostname
-DB_ID=your_user
-DB_PASSWORD=your_password
-DB_NAME=SAMPLE
+DB_HOST=magic.magic-ug.org
+DB_ID=M24USERNAME
+DB_PASSWORD=M24PASSWORD
+DB_NAME=D20AA82W
 ```
 </Card>
 
@@ -238,13 +238,15 @@ class Database:
     def __enter__(self):
         self.conn = pyodbc.connect(
             f"DRIVER={{IBM i Access ODBC Driver}};SYSTEM={os.getenv('DB_HOST')};"
-            f"UID={os.getenv('DB_ID')};PWD={os.getenv('DB_PASSWORD')}"
+            f"UID={os.getenv('DB_ID')};PWD={os.getenv('DB_PASSWORD')}",
+            autocommit=True
         )
         self.cursor = self.conn.cursor()
         return self.cursor
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.cursor.close()
+        self.conn.commit()
         self.conn.close()
 
 def get_db():
@@ -263,36 +265,55 @@ Here's an example of a simple API that returns a list of employees from the `SAM
 ```python
 // host.py
 
+import os
 from flask import Flask, jsonify, request
 from db import get_db
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
 @app.route('/employees', methods=['GET'])
 def get_employees():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("""
-        select 
-            empno as "id",
-            firstnme as "first",
-            lastname as "last",
-            job as "job",
-            workdept as "workdept",
-            salary as "salary"
-        from sample.employee
-    """)
-    rows = cursor.fetchall()
+    with get_db() as cursor:
+        cursor.execute("""
+            select
+                empno as "id",
+                firstnme as "first",
+                lastname as "last",
+                job as "job",
+                workdept as "workdept",
+                salary as "salary"
+            from sample.employee
+        """)
+        rows = cursor.fetchall()
 
-    employee_list = []
-    for row in rows:
-        employee_list.append(row)
-    
-    return jsonify(employee_list)
+        employee_list = []
+        for row in rows:
+            employee_list.append({
+                "id": row.id,
+                "first": row.first,
+                "last": row.last,
+                "job": row.job,
+                "workdept": row.workdept,
+                "salary": row.salary
+            })
+
+        return jsonify(employee_list)
 
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.getenv('PORT')))
 ```
+</Card>
+
+<Card>
+### Testing `host.py`
+```shell
+python3 host.py
+```
+
+Navigate to [http://127.0.0.1:5000/employees](http://127.0.0.1:5000/employees)
 </Card>
 
 <Card>
@@ -303,34 +324,83 @@ Add the following route to `host.py` to retrieve a specific employee by their ID
 
 @app.route('/employees/<id>', methods=['GET'])
 def get_employee(id):
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("""
-        select 
-            empno as "id",
-            firstnme as "first",
-            lastname as "last",
-            job as "job",
-            workdept as "workdept",
-            salary as "salary"
-        from sample.employee
-        where empno = ?
-    """, (id,))
-    employee = cursor.fetchone()
+    with get_db() as cursor:
+        cursor.execute("""
+            select 
+                empno as "id",
+                firstnme as "first",
+                lastname as "last",
+                job as "job",
+                workdept as "workdept",
+                salary as "salary"
+            from sample.employee
+            where empno = ?
+        """, (id,))
+        employee = cursor.fetchone()
 
-    if employee:
-        employee_dict = {
-            "id": employee[0],
-            "first": employee[1],
-            "last": employee[2],
-            "job": employee[3],
-            "workdept": employee[4],
-            "salary": employee[5]
-        }
-        return jsonify(employee_dict)
-    else:
-        return jsonify({"error": "Employee not found"}), 404
+        if employee:
+            employee_dict = {
+                "id": employee[0],
+                "first": employee[1],
+                "last": employee[2],
+                "job": employee[3],
+                "workdept": employee[4],
+                "salary": employee[5]
+            }
+            return jsonify(employee_dict)
+        else:
+            return jsonify({"error": "Employee not found"}), 404
 ```
+</Card>
+
+<Card>
+### Testing `host.py`
+```shell
+python3 host.py
+```
+
+Navigate to [http://127.0.0.1:5000/employees/000010](http://127.0.0.1:5000/employees/000010)
+</Card>
+
+<Card>
+### GET /departments/
+Add the following route to `host.py` to retrieve all departments:
+```python
+// host.py
+
+@app.route('/departments', methods=['GET'])
+def get_departments():
+    with get_db() as cursor:
+        cursor.execute("""
+            select
+                deptno as "id",
+                deptname as "name",
+                location as "location",
+                mgrno as "manager"
+            from sample.department
+        """)
+        rows = cursor.fetchall()
+
+        department_list = []
+        for row in rows:
+            department_list.append({
+                "id": row.id,
+                "name": row.name,
+                "location": row.location,
+                "manager": row.manager
+            })
+
+        return jsonify(department_list)
+```
+</Card>
+
+<Card>
+### Testing `host.py`
+```shell
+python3 host.py
+```
+
+Navigate to [http://127.0.0.1:5000/departments](http://127.0.0.1:5000/departments)
 </Card>
 
 <Card>
@@ -341,31 +411,40 @@ Add the following route to `host.py` to retrieve a specific department by its ID
 
 @app.route('/departments/<id>', methods=['GET'])
 def get_department(id):
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("""
-        select 
-            deptno as "id",
-            deptname as "name",
-            location as "location",
-            mgrno as "manager"
-        from sample.department
-        where deptno = ?
-    """, (id,))
-    department = cursor.fetchone()
+    with get_db() as cursor:
+        cursor.execute("""
+            select 
+                deptno as "id",
+                deptname as "name",
+                location as "location",
+                mgrno as "manager"
+            from sample.department
+            where deptno = ?
+        """, (id,))
+        department = cursor.fetchone()
 
-    if department:
-        department_dict = {
-            "id": department[0],
-            "name": department[1],
-            "location": department[2],
-            "mgrno": department[3]
-        }
-        return jsonify(department_dict)
-    else:
-        return jsonify({"error": "Department not found"}), 404
+        if department:
+            department_dict = {
+                "id": department[0],
+                "name": department[1],
+                "location": department[2],
+                "mgrno": department[3]
+            }
+            return jsonify(department_dict)
+        else:
+            return jsonify({"error": "Department not found"}), 404
 ```
 </Card>
+
+<Card>
+### Testing `host.py`
+```shell
+python3 host.py
+```
+
+Navigate to [http://127.0.0.1:5000/departments/A00](http://127.0.0.1:5000/departments/A00)
+</Card>
+
 
 ## Testing your API
 Before we move onto other REST methods, let's cover how to test your API with tools that are available to you.
@@ -409,10 +488,7 @@ Add the following route to `host.py` to update the manager for a specific depart
 @app.route('/departments/<id>', methods=['PATCH'])
 def update_department(id):
     data = request.get_json()
-    conn = get_db()
-    cursor = conn.cursor()
-    
-    try:
+    with get_db() as cursor:
         cursor.execute("""
             SELECT 
                 deptno as "id",
@@ -430,10 +506,10 @@ def update_department(id):
                 UPDATE sample.department 
                 SET deptname = ?, location = ?, mgrno = ? 
                 WHERE deptno = ?
+                WITH NC
                 """,
                 (data['name'], data['location'], data['manager'], id)
             )
-            conn.commit()
 
             updated_department = {
                 "id": id,
@@ -444,10 +520,25 @@ def update_department(id):
             return jsonify(updated_department)
         else:
             return jsonify({"error": "Department not found"}), 404
-    finally:
-        cursor.close()
-        conn.close()
 ```
+
+#### Test this endpoint using Thunder Client!
+
+Select `PATCH` and enter `http://127.0.0.1:5000/departments/A00` with the following JSON data in the `Request Body`:
+
+```json
+{
+    "name": "New Department Name",
+    "location": "New Location",
+    "manager": "000020"
+}
+```
+
+<Aside type="caution">
+`manager` is limited to 6 characters and must be a valid employee number from the `EMPLOYEE` table.
+</Aside>
+
+Then switch to `GET` to verify the changes.
 </Card>
 
 ## Consuming an API
@@ -474,74 +565,54 @@ if response.status_code == 200:
     print("Employees:", employees)
 else:
     print("Failed to retrieve employees:", response.status_code)
+    print(response.text)
+
 ```
 
 This script sends a GET request to the `/employees` endpoint and prints the list of employees if the request is successful.
 
 </Card>
 <Aside type="note">
-You can either run your original `host.py` script or try out the hosted API Playground to test this script out `http://magic.magic-ug.org:10500/` with the `/employees` endpoint and `/departments` endpoint.
+You can either run your original `host.py` script by pressing `+` to open a new terminal in VS Code or try out the hosted API Playground to test this script out `http://magic.magic-ug.org:10500/` with the `/employees` endpoint and `/departments` endpoint.
 </Aside>
 
 <Card>
-### PUT /employees
-Next, add code to `consume.py` to add your own employee details using a PUT request:
+### Testing `consume.py`
+```shell
+python3 consume.py
+```
+</Card>
+
+<Card>
+### PATCH /departments
+Next, add code to `consume.py` to patch departments with data from the `/departments` endpoint:
 ```python
 // consume.py
 
-# Define the new employee data
-new_employee = {
-    "first": "John",
-    "last": "Doe",
-    "job": "Software Developer",
-    "workdept": "IT",
-    "salary": 100000
-}
-
-# Send the PUT request to add the new employee
-response = requests.put('http://127.0.0.1:5000/employees', json=new_employee)
-if response.status_code == 200:
-    created_employee = response.json()
-    print("Employee added successfully. Your new Employee ID is:", created_employee['id'])
-else:
-    print("Failed to add employee:", response.status_code)
-```
-
-This script sends a PUT request to the `/employees` endpoint with the new employee data and prints the ID of the newly created employee if the request is successful.
-
-</Card>
-
-## GET & PATCH /departments
-
-<Card>
-To retrieve the list of departments and update the manager for departments where the manager is '101', follow these steps:
-
-### GET /departments then PATCH /departments
-```python 
-// consume.py
-
-# Get the list of departments
+# Send the GET request to retrieve all departments
 response = requests.get('http://127.0.0.1:5000/departments')
 if response.status_code == 200:
     departments = response.json()
-    print("Departments:", departments)
+    
+    for department in departments:
+        department_id = department['id']
+        updated_department = {
+            "location": "Virginia Beach"
+        }
+        
+        # Send the PATCH request to update the department's location
+        patch_response = requests.patch(f'http://127.0.0.1:5000/departments/{department_id}', json=updated_department)
+        if patch_response.status_code == 200:
+            print(f"Department {department_id} location updated successfully.")
+        else:
+            print(f"Failed to update department {department_id}:", patch_response.status_code)
+            print(patch_response.text)
 else:
     print("Failed to retrieve departments:", response.status_code)
-
-# Update departments where the manager is '101'
-for department in departments:
-    if department['manager'] == '101':
-        department['manager'] = '121'
-        patch_response = requests.patch(f"http://127.0.0.1:5000/departments/{department['id']}", json=department)
-        if patch_response.status_code == 200:
-            print(f"Updated department {department['id']} successfully.")
-        else:
-            print(f"Failed to update department {department['id']}: {patch_response.status_code}")
+    print(response.text)
 ```
 
-This script demonstrates taking the results of one API to feed another subsequent API call.
-
-In this fictional scenario, we're updating the manager for departments where the manager is '101' to '121' without knowing the department IDs in advance.
+This script sends a PATCH request to the `/departments` endpoint with the new location data and prints the ID of the updated departments if the request is successful.
 
 </Card>
 
