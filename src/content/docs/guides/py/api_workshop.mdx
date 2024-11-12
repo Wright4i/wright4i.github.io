@@ -84,16 +84,47 @@ If an API has an OpenAPI formatted yml or json file, you can use Swagger UI to v
 
 ## Setting up your Environment
 
-<LinkCard title="Download & install Python" href="https://www.python.org/downloads" description="python.org/downloads" />
+<Card>
+    ### Installing Python
+    <Aside type="caution">
+    Before you start, make sure you only have a single version of Python installed.
 
-<LinkCard title="Download & install VS Code" href="https://code.visualstudio.com/download" description="code.visualstudio.com/download" />
+    If you are unsure goto the terminal and run:
+    ```shell
+    python --version
+    ```
 
-<LinkCard title="Download & install the Python extension for VS Code" href="https://marketplace.visualstudio.com/items?itemName=ms-python.python" description="marketplace.visualstudio.com/items?itemName=ms-python.python" />
+    If you see `Python 2.x.x` quit python by typing `quit()` and run:
+    ```shell
+    python3 --version
+    ```
 
-<LinkCard title="Download & install the Thunder Client extension" href="https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client" description="marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client" />
+    If you see `Python 3.x.x` you are good to go. If not, you need to install Python 3.
 
-<LinkCard title="[Optional] Download & install Code for IBM i" href="https://marketplace.visualstudio.com/items?itemName=HalcyonTechLtd.ibm-i-development-pack" description="marketplace.visualstudio.com/items?itemName=HalcyonTechLtd.ibm-i-development-pack" />
+    **Note**: Certain versions of Windows `python` and `python3` might open the Microsoft Store. If that happens, press `GET` and install Python 3 from the store.
+    </Aside>
 
+    Installing Python is straightforward. You can download the latest version from the official Python website.
+
+    When you first install Python, make sure to check the box that says **"Add Python to PATH"**to make it easier to run Python commands from the terminal.
+
+    <LinkCard title="Download & install Python" href="https://www.python.org/downloads" description="python.org/downloads" />
+</Card>
+
+<CardGrid>
+    <Card>
+        <LinkCard title="Download & install VS Code" href="https://code.visualstudio.com/download" description="code.visualstudio.com/download" />
+    </Card>
+    <Card>
+        <LinkCard title="Download & install the Python extension for VS Code" href="https://marketplace.visualstudio.com/items?itemName=ms-python.python" description="marketplace.visualstudio.com/items?itemName=ms-python.python" />
+    </Card>
+    <Card>
+        <LinkCard title="Download & install the Thunder Client extension" href="https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client" description="marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client" />
+    </Card>
+    <Card>
+        <LinkCard title="[Optional] Download & install Code for IBM i" href="https://marketplace.visualstudio.com/items?itemName=HalcyonTechLtd.ibm-i-development-pack" description="marketplace.visualstudio.com/items?itemName=HalcyonTechLtd.ibm-i-development-pack" />
+    </Card>
+</CardGrid>
 <Aside type="note">
 In this guide, we use `python3` and `pip3` commands. Depending on your system configuration, `python` might refer to Python 2. If that's the case, you need to use `python3` and `pip3` instead.
 You can get more specific by using `python3.6` or `python3.9` if you have multiple versions installed.
@@ -102,11 +133,11 @@ You can get more specific by using `python3.6` or `python3.9` if you have multip
 ### Project Setup
 <CardGrid stagger>
 <Card title="Step #1" icon="add-document">
-Create a new folder for your project.
+Create a new folder for your project. This can be a folder anywhere on your computer.
 </Card>
 
 <Card title="Step #2" icon="open-book">
-Open Visual Studio Code and select "Open Folder" to open your project folder.
+Open Visual Studio Code and select `FILE` and "Open Folder" to open your project folder.
 </Card>
 
 <Card title="Step #3" icon="forward-slash">
@@ -119,24 +150,29 @@ Create a new virtual environment:
 python3 -m venv --system-site-packages venv
 ```
 <Aside type="note">
-Virtual environments are used to manage dependencies for your projects.
+Virtual environments are used to manage dependencies for your projects. All your `PIP` installs will be isolated to this environment.
 </Aside>
 </Card>
 
 <Card title="Step #5" icon="rocket">
 Activate your virtual environment:
-    - On PASE (IBM i):
+    - On Windows:
         ```shell
-        . venv/bin/activate
+        venv\Scripts\activate
         ```
     - On macOS/Linux:
         ```shell
         source venv/bin/activate
         ```
-    - On Windows:
+    - On PASE (IBM i):
         ```shell
-        venv\Scripts\activate
+        . venv/bin/activate
         ```
+<Aside type="note">
+If you see `(venv)` in your terminal prompt, you have successfully activated your virtual environment.
+
+You will need to activate your virtual environment every time you open a new terminal.
+</Aside>
 </Card>
 </CardGrid>
 
@@ -151,6 +187,17 @@ pip3 install flask
 
 <Card>
 ### Step 2: Create a new file `hello.py`
+
+<Aside type="info">
+Your directory structure should look like this:
+```
+project-folder/
+├── venv/
+|  └── ...
+├── .env
+└── main.py
+```
+</Aside>
 ```python
 // hello.py
 
@@ -162,6 +209,7 @@ app = Flask(__name__)
 def home():
     return 'Hello, World!'
 
+# ^^ Add New Routes Above ^^
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
 ```
@@ -302,6 +350,7 @@ def get_employees():
 
         return jsonify(employee_list)
 
+# ^^ Add New Routes Above ^^
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.getenv('PORT')))
 ```
