@@ -621,12 +621,15 @@ else:
 This script sends a GET request to the `/employees` endpoint and prints the list of employees if the request is successful.
 
 </Card>
-<Aside type="note">
-You can either run your original `host.py` script by pressing `+` to open a new terminal in VS Code or try out the hosted API Playground to test this script out `http://magic.magic-ug.org:10500/` with the `/employees` endpoint and `/departments` endpoint.
-</Aside>
 
 <Card>
 ### Testing `consume.py`
+    <Aside type="danger">
+        Before testing `consume.py` your original `host.py` script should be running. 
+
+        Press the `+` to open a new terminal in VS Code.
+    </Aside>
+
 ```shell
 python3 consume.py
 ```
