@@ -597,6 +597,8 @@ if response.status_code == 200:
     for department in departments:
         department_id = department['id']
         updated_department = {
+            "name": department['name'],
+            "manager": department['manager'],
             "location": "Virginia Beach"
         }
         
