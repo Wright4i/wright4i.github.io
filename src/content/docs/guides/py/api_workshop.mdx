@@ -196,7 +196,6 @@ Your directory structure should look like this:
 project-folder/
 ├── venv/
 |  └── ...
-├── .env
 └── hello.py
 ```
 </Aside>
@@ -254,15 +253,26 @@ pip3 install python-dotenv pyodbc
 
 <Card>
 ### Step 2: Create a new file `.env` updating `USERNAME` and `PASSWORD`
-```shell title="VSCode Terminal"
+```zsh
 // .env
 
 PORT=5000
-DB_HOST=magic.magic-ug.org
-DB_ID=M24USERNAME
-DB_PASSWORD=M24PASSWORD
-DB_NAME=D20AA82W
+DB_HOST=YOUR_IBMI
+DB_ID=YOUR_USERNAME
+DB_PASSWORD=YOUR_PASSWORD
+DB_NAME=YOUR_DB_NAME
 ```
+
+<Aside type="tip">
+Your directory structure should now look like this:
+```
+project-folder/
+├── venv/
+|  └── ...
+├── .env
+└── hello.py
+```
+</Aside>
 </Card>
 
 <Card>
