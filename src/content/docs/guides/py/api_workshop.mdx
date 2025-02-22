@@ -620,6 +620,19 @@ This script sends a PATCH request to the `/departments` endpoint with the new lo
 
 </Card>
 
+<Card>
+### Test `consume.py` again
+    `host.py` script should be running. Call `python3 consume.py` to test the script.
+
+    The code should GET the list of Departments, PATCH the location to "Costa Mesa" and print that it updated departments.
+
+    Verify Location was updated by calling `GET` on the `/departments` endpoint.
+
+```shell title="VSCode Terminal"
+python3 consume.py
+```
+</Card>
+
 # Congratulations! 🎉 
 
 You've successfully set up a basic Flask application, created API endpoints and consumed those APIs all using Python.
