@@ -7,15 +7,17 @@ sidebar:
 
 import { Aside, CardGrid, Card, Icon, LinkCard} from '@astrojs/starlight/components';
 
-## Requirements
+## Recommendations
 
 You must **B**ring **Y**our **O**wn **D**evice and have access to an IBM i.
+
+While you can simply copy the code, it is recommended to follow along and type it out yourself to get a better understanding of the concepts.
 
 ## Goals
 * Understand APIs & Documentation <Icon name="approve-check-circle" class="icon-inline color-jade" />
 * Host an API locally with Python <Icon name="approve-check-circle" class="icon-inline color-jade" />
 * Consume an API with Python <Icon name="approve-check-circle" class="icon-inline color-jade" />
-* Learn the basics of Authentication <Icon name="approve-check-circle" class="icon-inline color-jade" />
+* Have Fun <Icon name="approve-check-circle" class="icon-inline color-jade" />
 
 ## RESTful API Basics
 REST (Representational State Transfer) is a way to design networked applications. It uses HTTP requests to perform operations like Create, Read, Update, and Delete (CRUD) on resources identified by URLs.
@@ -84,19 +86,19 @@ A generic error message, given when an unexpected condition was encountered and 
     python --version
     ```
 
-    If you see `Python 2.x.x` quit python by typing `quit()` and run:
+    If you see `Python 2.x.x` try adding a `3` to the end of the command:
     ```shell title="VSCode Terminal"
     python3 --version
     ```
 
-    If you see `Python 3.x.x` you are good to go. If not, you need to install Python 3.
+    Mapepire requires **Python 3.10** or newer to run. If your version is older, you will need to update it.
 
     **Note**: Certain versions of Windows `python` and `python3` might open the Microsoft Store. If that happens, press `GET` and install Python 3 from the store.
     </Aside>
 
     Installing Python is straightforward. You can download the latest version from the official Python website.
 
-    When you first install Python, make sure to check the box that says `[✓] Add Python to PATH`!
+    When you first install Python, **make sure to check the box that says** `[✓] Add Python to PATH`!
 
     <LinkCard title="Download & install Python" href="https://www.python.org/downloads" description="python.org/downloads" />
 </Card>
@@ -118,8 +120,9 @@ A generic error message, given when an unexpected condition was encountered and 
 <Aside type="caution">
 In this guide, we use `python3` and `pip3` commands.
 
-Not every system will be the same. Sometimes `python` and `pip` are used instead.
-You have to adjust the commands based on your system!
+Not every system will be the same. Sometimes `python` and `pip` are used instead (if they resolve to Python 3).
+
+Adjust the commands in this guide as needed for your system.
 </Aside>
 
 ### Project Setup
@@ -164,6 +167,8 @@ Activate your virtual environment:
 If you see `(venv)` in your terminal prompt, you have successfully activated your virtual environment.
 
 You will need to activate your virtual environment every time you open a new terminal.
+
+In VS Code, the lower right corner should say `Python 3.x.x (venv)` you can click on this to change versions and virtual environments.
 </Aside>
 </Card>
 </CardGrid>
@@ -237,20 +242,20 @@ For other methods like POST, PUT, PATCH, and DELETE, you can use tools like Thun
 <Card>
 ### Step 1: Install additional packages
 ```shell title="VSCode Terminal"
-pip3 install python-dotenv pyodbc
+pip3 install mapepire-python
 ```
 </Card>
 
 <Card>
-### Step 2: Create a new file `.env` updating `USERNAME` and `PASSWORD`
-```zsh
-// .env
+### Step 2: Create a new file `mapepire.ini` updating `SERVERNAME`, `USERNAME`, `PASSWORD`
+```ini
+// mapepire.ini
 
-PORT=5000
-DB_HOST=YOUR_IBMI
-DB_ID=YOUR_USERNAME
-DB_PASSWORD=YOUR_PASSWORD
-DB_NAME=YOUR_DB_NAME
+[mapepire]
+SERVER=SERVERNAME
+PORT=10500
+USER=USERNAME
+PASSWORD=PASSWORD
 ```
 
 <Aside type="tip">
@@ -259,48 +264,39 @@ Your directory structure should now look like this:
 project-folder/
 ├── venv/
 |  └── ...
-├── .env
-└── hello.py
+├── hello.py
+└── mapepire.ini
 ```
 </Aside>
 </Card>
 
 <Card>
 ### Step 3: Copy this to a new file `db.py` 
+Creating a new file `db.py` to handle the database connection will help keep your code organized and keep us from repeating the same code in multiple places.
+
 <Aside type="tip">
 Hover over the top-right corner of code blocks for a clipboard button <Icon name="right-arrow" class="icon-inline color-amethyst-high" />
 </Aside>
 ```python
 // db.py
 
-import os
-import pyodbc
-from dotenv import load_dotenv
-
-load_dotenv()
-
-class Database:
-    def __init__(self):
-        self.user = os.getenv('DB_ID')
-        self.password = os.getenv('DB_PASSWORD')
-        self.database = os.getenv('DB_NAME')
-
-    def __enter__(self):
-        self.conn = pyodbc.connect(
-            f"DRIVER={{IBM i Access ODBC Driver}};SYSTEM={os.getenv('DB_HOST')};"
-            f"UID={os.getenv('DB_ID')};PWD={os.getenv('DB_PASSWORD')}",
-            autocommit=True
-        )
-        self.cursor = self.conn.cursor()
-        return self.cursor
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.cursor.close()
-        self.conn.commit()
-        self.conn.close()
+import configparser
+from mapepire_python import connect
+from mapepire_python.data_types import DaemonServer
 
 def get_db():
-    return Database()
+    config = configparser.ConfigParser()
+    config.read('mapepire.ini')
+
+    creds = DaemonServer(
+        host=config['mapepire']['SERVER'],
+        port=config['mapepire']['PORT'],
+        user=config['mapepire']['USER'],
+        password=config['mapepire']['PASSWORD'],
+        ignoreUnauthorized=True
+    )
+
+    return connect(creds)
 ```
 </Card>
 
@@ -318,16 +314,13 @@ Here's an example of a simple API that returns a list of employees from the `SAM
 import os
 from flask import Flask, jsonify, request
 from db import get_db
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = Flask(__name__)
 
 @app.route('/employees', methods=['GET'])
 def get_employees():
-    with get_db() as cursor:
-        cursor.execute("""
+    with get_db() as conn:
+        with conn.execute("""
             select
                 empno as "id",
                 firstnme as "first",
@@ -336,25 +329,14 @@ def get_employees():
                 workdept as "workdept",
                 salary as "salary"
             from sample.employee
-        """)
-        rows = cursor.fetchall()
-
-        employee_list = []
-        for row in rows:
-            employee_list.append({
-                "id": row.id,
-                "first": row.first,
-                "last": row.last,
-                "job": row.job,
-                "workdept": row.workdept,
-                "salary": row.salary
-            })
-
-        return jsonify(employee_list)
+        """) as cursor:
+            rows = cursor.fetchall()
+       
+            return rows['data']
 
 # ^^ Add New Routes Above ^^
 if __name__ == '__main__':
-    app.run(debug=True, port=int(os.getenv('PORT')))
+    app.run(debug=True, port=5000)
 ```
 </Card>
 
@@ -375,8 +357,8 @@ Add the following route to `host.py` to retrieve a specific employee by their ID
 
 @app.route('/employees/<id>', methods=['GET'])
 def get_employee(id):
-    with get_db() as cursor:
-        cursor.execute("""
+    with get_db() as conn:
+        with conn.execute("""
             select 
                 empno as "id",
                 firstnme as "first",
@@ -386,21 +368,13 @@ def get_employee(id):
                 salary as "salary"
             from sample.employee
             where empno = ?
-        """, (id,))
-        employee = cursor.fetchone()
+        """, (id,)) as cursor:
+            employee = cursor.fetchone()
 
-        if employee:
-            employee_dict = {
-                "id": employee[0],
-                "first": employee[1],
-                "last": employee[2],
-                "job": employee[3],
-                "workdept": employee[4],
-                "salary": employee[5]
-            }
-            return jsonify(employee_dict)
-        else:
-            return jsonify({"error": "Employee not found"}), 404
+            if employee['data']:
+                return employee['data']
+            else:
+                return jsonify({"error": "Employee not found"}), 404
 ```
 </Card>
 
@@ -421,27 +395,18 @@ Add the following route to `host.py` to retrieve all departments:
 
 @app.route('/departments', methods=['GET'])
 def get_departments():
-    with get_db() as cursor:
-        cursor.execute("""
+    with get_db() as conn:
+        with conn.execute("""
             select
                 deptno as "id",
                 deptname as "name",
                 location as "location",
                 mgrno as "manager"
             from sample.department
-        """)
-        rows = cursor.fetchall()
+        """) as cursor:
+            rows = cursor.fetchall()
 
-        department_list = []
-        for row in rows:
-            department_list.append({
-                "id": row.id,
-                "name": row.name,
-                "location": row.location,
-                "manager": row.manager
-            })
-
-        return jsonify(department_list)
+            return rows['data']
 ```
 </Card>
 
@@ -462,8 +427,8 @@ Add the following route to `host.py` to retrieve a specific department by its ID
 
 @app.route('/departments/<id>', methods=['GET'])
 def get_department(id):
-    with get_db() as cursor:
-        cursor.execute("""
+    with get_db() as conn:
+        with conn.execute("""
             select 
                 deptno as "id",
                 deptname as "name",
@@ -471,19 +436,13 @@ def get_department(id):
                 mgrno as "manager"
             from sample.department
             where deptno = ?
-        """, (id,))
-        department = cursor.fetchone()
+        """, (id,)) as cursor:
+            department = cursor.fetchone()
 
-        if department:
-            department_dict = {
-                "id": department[0],
-                "name": department[1],
-                "location": department[2],
-                "mgrno": department[3]
-            }
-            return jsonify(department_dict)
-        else:
-            return jsonify({"error": "Department not found"}), 404
+            if department['data']:
+                return department['data']
+            else:
+                return jsonify({"error": "Department not found"}), 404
 ```
 </Card>
 
@@ -524,9 +483,9 @@ Add the following route to `host.py` to update the manager for a specific depart
 
 @app.route('/departments/<id>', methods=['PATCH'])
 def update_department(id):
-    data = request.get_json()
-    with get_db() as cursor:
-        cursor.execute("""
+    payload = request.get_json()
+    with get_db() as conn:
+        with conn.execute("""
             SELECT 
                 deptno as "id",
                 deptname as "name",
@@ -534,29 +493,28 @@ def update_department(id):
                 mgrno as "manager"
             FROM sample.department
             WHERE deptno = ?
-        """, (id,))
-        department = cursor.fetchone()
+        """, (id,)) as cursor:
+            department = cursor.fetchone()
 
-        if department:
-            cursor.execute(
-                """
-                UPDATE sample.department 
-                SET deptname = ?, location = ?, mgrno = ? 
-                WHERE deptno = ?
-                WITH NC
-                """,
-                (data['name'], data['location'], data['manager'], id)
-            )
+            if department['data']:
+                conn.execute(
+                    """
+                    UPDATE sample.department 
+                    SET deptname = ?, location = ?, mgrno = ? 
+                    WHERE deptno = ?
+                    """,
+                    (payload['name'], payload['location'], payload['manager'], id)
+                )
 
-            updated_department = {
-                "id": id,
-                "name": data['name'],
-                "location": data['location'],
-                "manager": data['manager']
-            }
-            return jsonify(updated_department)
-        else:
-            return jsonify({"error": "Department not found"}), 404
+                updated_department = {
+                    "id": id,
+                    "name": payload['name'],
+                    "location": payload['location'],
+                    "manager": payload['manager']
+                }
+                return jsonify(updated_department)
+            else:
+                return jsonify({"error": "Department not found"}), 404
 ```
 
 #### Test this endpoint using Thunder Client!
@@ -595,12 +553,12 @@ First, create a new file `consume.py` and add the following code to retrieve the
 
 import requests
 
-# Get the list of employees
+# Get the list of employees from our host API
 response = requests.get('http://127.0.0.1:5000/employees')
-if response.status_code == 200:
-    employees = response.json()
+if response.status_code == 200: # Check if the request was successful
+    employees = response.json() # Convert the response to JSON
     print("Employees:", employees)
-else:
+else: # Error handling
     print("Failed to retrieve employees:", response.status_code)
     print(response.text)
 
@@ -632,19 +590,21 @@ Next, add code to `consume.py` to patch departments with data from the `/departm
 # Send the GET request to retrieve all departments
 response = requests.get('http://127.0.0.1:5000/departments')
 if response.status_code == 200:
-    departments = response.json()
+    departments = response.json() # Convert the response to JSON
     
-    for department in departments:
+    for department in departments: # Loop through each department
         department_id = department['id']
-        updated_department = {
+
+        # Update the department's location to "Costa Mesa"
+        updated_department = { 
             "name": department['name'],
             "manager": department['manager'],
-            "location": "Virginia Beach"
+            "location": "Costa Mesa"
         }
         
-        # Send the PATCH request to update the department's location
+        # Send the PATCH request to update the department's location passing in department_id and updated_department
         patch_response = requests.patch(f'http://127.0.0.1:5000/departments/{department_id}', json=updated_department)
-        if patch_response.status_code == 200:
+        if patch_response.status_code == 200: 
             print(f"Department {department_id} location updated successfully.")
         else:
             print(f"Failed to update department {department_id}:", patch_response.status_code)
@@ -663,6 +623,10 @@ This script sends a PATCH request to the `/departments` endpoint with the new lo
 You've successfully set up a basic Flask application, created API endpoints and consumed those APIs all using Python.
 
 This is for you! <Icon name="star" class="icon-inline color-topaz" />
+
+Take a moment to reflect on what you've learned and how you can apply this knowledge to your own projects.
+
+---
 
 # Ready for Extra Credit?
 Finish the workshop early? Try these challenges!
