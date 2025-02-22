@@ -72,16 +72,6 @@ A generic error message, given when an unexpected condition was encountered and 
 </Card>
 </CardGrid>
 
-## APIs Visualized
-Swagger UI is a popular tool for visualizing APIs. It provides a user-friendly interface to interact with APIs and understand their endpoints and data structures.
-
-If an API has an OpenAPI formatted yml or json file, you can use Swagger UI to visualize it.
-
-<LinkCard title="View API Playground's API" href="https://editor.swagger.io/?url=https://gist.githubusercontent.com/Wright4i/06184a609ee80090466fe2c8a6f0c468/raw/9d0601690232250713300bb7eec6ae7dbd07f2ef/playground.yml" description="editor.swagger.io" />
-
-![API Playground Swagger](/api_workshop/api-playground-swagger.png)
-
-
 ## Setting up your Environment
 
 <Card>
@@ -518,25 +508,11 @@ Use the extension in VS Code to test your API endpoints.
 * Specify the Method (GET/PUT/PATCH) and URL (ex. `http://127.0.0.1:5000/employees`)
 * Add any headers or body data.
 * Click `Send Request` to see the response.
-<iframe width="480px" src="https://www.youtube.com/embed/NKZ0ahNbmak" title="Thunder Client - Lightweight Rest API Client Extension for VS Code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </Card>
-
 <Card>
-### API Playground
-A hosted web-based API playground is available for you to test your API endpoints both sending and receiving data.
-
-<div class="grid-1">
-      <a class="grid-button" href="http://magic.magic-ug.org:10500">
-        <div class="grid-item color-dark-bg color-amethyst"> 
-          Hosted @ MAGiC (magic.magic-ug.org:10500) <Icon name="external" class="icon-inline" />
-        </div>
-      </a>
-      <a class="grid-button" href="https://github.com/Wright4i/api-playground">
-        <div class="grid-item color-dark-bg color-garnet"> 
-          Host it Yourself (see: README) <Icon name="external" class="icon-inline" />
-        </div>
-    </a>
-</div>
+How to use Thunder Client:
+<iframe width="480px" src="https://www.youtube.com/embed/NKZ0ahNbmak" title="Thunder Client - Lightweight Rest API Client Extension for VS Code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+Fullscreen the video for a better view.
 </Card>
 </CardGrid>
 
@@ -682,7 +658,50 @@ This script sends a PATCH request to the `/departments` endpoint with the new lo
 
 </Card>
 
-## Basics of Authentication
+# Congratulations! 🎉 
+
+You've successfully set up a basic Flask application, created API endpoints and consumed those APIs all using Python.
+
+This is for you! <Icon name="star" class="icon-inline color-topaz" />
+
+# Ready for Extra Credit?
+Finish the workshop early? Try these challenges!
+
+## Welcome to the API Playground
+The API Playground is a hosted web-based API testing site I built that allows you to visualize both the sending and receiving of data.
+
+### Get Connected to API Playground
+<Card>
+<div class="grid-1">
+      <a class="grid-button" href="http://magic.magic-ug.org:10500">
+        <div class="grid-item color-dark-bg color-amethyst"> 
+          Hosted @ MAGiC (magic.magic-ug.org:10500) <Icon name="external" class="icon-inline" />
+        </div>
+      </a>
+      <a class="grid-button" href="https://github.com/Wright4i/api-playground">
+        <div class="grid-item color-dark-bg color-garnet"> 
+          Host it Yourself (see: README) <Icon name="external" class="icon-inline" />
+        </div>
+    </a>
+</div>
+</Card>
+
+## Side Quests
+
+Take a look at the API endpoints available in the API Playground and try to consume them using Python.
+
+### Explore the API Endpoints using Swagger
+Swagger UI is a popular tool for visualizing APIs. It provides a user-friendly interface to interact with APIs and understand their endpoints and data structures.
+
+If an API has an OpenAPI formatted yml or json file, you can use Swagger UI to visualize it.
+
+<LinkCard title="View API Playground's API" href="https://editor.swagger.io/?url=https://gist.githubusercontent.com/Wright4i/06184a609ee80090466fe2c8a6f0c468/raw/9d0601690232250713300bb7eec6ae7dbd07f2ef/playground.yml" description="editor.swagger.io" />
+
+![API Playground Swagger](/api_workshop/api-playground-swagger.png)
+
+
+### Get Authenticated
+Many APIs require authentication to access their endpoints. There are several methods for authenticating requests to APIs.
 
 <Card>
 ### Common Types
@@ -741,8 +760,7 @@ Don't actually hard code your authentication tokens in your code. Use environmen
 ![API Playground Valid Token](/api_workshop/api-playground-view-token.png)
 </Card>
 
-# Congratulations! 🎉 
+## Hit your API with a Request from API Playground
+Using the `Send` Tab you can send a `GET` `POST` or `PUT` to your API.
 
-You've successfully set up a basic Flask application, created API endpoints, consumed those APIs, and learned about authentication.
-
-This is for you! <Icon name="star" class="icon-inline color-topaz" />
+Give it a shot!
